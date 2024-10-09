@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import Image from "next/image";
+import { styled } from 'styled-components';
+import Image from 'next/image';
 
-import searchIcon from "@/public/images/search_icon.png";
+import searchIcon from '@/public/images/search_icon.png';
 
 export default function Nav(): JSX.Element {
   return (
@@ -22,7 +22,7 @@ export default function Nav(): JSX.Element {
   );
 }
 
-function getServerSideProps() {}
+// function getServerSideProps() {}
 
 const NavWrapSt = styled.nav`
   display: flex;

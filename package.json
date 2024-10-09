@@ -1,0 +1,23 @@
+{
+  "name": "devblog",
+  "description": "",
+  "scripts": {
+    "client": "cd client && npm run dev",
+    "server": "cd server",
+    "prepare": "husky",
+    "clientFormat": "cd client && npm run format",
+    "clientLint": "cd client && npm run lint"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10"
+  },
+  "lint-staged": {
+    "*.{js, jsx, ts, tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  }
+}

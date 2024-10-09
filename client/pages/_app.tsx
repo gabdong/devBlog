@@ -1,23 +1,23 @@
-import { AppProps } from "next/app";
-import Head from "next/head";
-import styled from "styled-components";
-import localFont from "next/font/local";
-import { usePathname } from "next/navigation";
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import { styled } from 'styled-components';
+import localFont from 'next/font/local';
+import { usePathname } from 'next/navigation';
 
-import "@/styles/globals.css";
+import '@/styles/globals.css';
 
-import Nav from "@/components/Nav";
-import Header from "@/components/Header";
+import Nav from '@/components/Nav';
+import Header from '@/components/Header';
 
 const pretendard = localFont({
-  src: "../public/fonts/PretendardVariable.woff2",
-  display: "swap",
-  weight: "45 920",
-  variable: "--font-pretendard",
+  src: '../public/fonts/PretendardVariable.woff2',
+  display: 'swap',
+  weight: '45 920',
+  variable: '--font-pretendard',
 });
 
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
-  console.log("----- App Rendering -----");
+  console.log('----- App Rendering -----');
   const pathName = usePathname();
 
   pageProps.pathName = pathName;

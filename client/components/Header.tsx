@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import Image from "next/image";
-import Link from "next/link";
+import { styled } from 'styled-components';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import whiteLogo from "@/public/images/logo_white.png";
+import whiteLogo from '@/public/images/logo_white.png';
 
 interface props {
   pathName: string;
@@ -19,14 +19,14 @@ export default function Header({ pathName }: props): JSX.Element {
         <div>
           <HeaderTabButtonSt
             className={
-              pathName == "/about_me" || pathName == "/" ? "active" : ""
+              pathName == '/about_me' || pathName == '/' ? 'active' : ''
             }
             href="/about_me/?tab=about_me"
           >
             About Me
           </HeaderTabButtonSt>
           <HeaderTabButtonSt
-            className={pathName == "/post" ? "active" : ""}
+            className={pathName == '/post' ? 'active' : ''}
             href="/post/?tab=latest_content"
           >
             최근게시물
