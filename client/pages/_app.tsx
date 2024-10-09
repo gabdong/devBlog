@@ -20,7 +20,8 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   console.log("----- App Rendering -----");
   const pathName = usePathname();
 
-  console.log(pathName);
+  pageProps.pathName = pathName;
+
   return (
     <>
       <Head>

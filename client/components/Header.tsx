@@ -43,11 +43,11 @@ const HeaderWrapSt = styled.header`
   align-items: center;
 
   width: 100%;
-  height: 60px;
+  height: var(--header-height);
   border-bottom: 0.5px solid var(--primary-color);
 `;
 const LogoWrapSt = styled.div`
-  width: 160px;
+  width: var(--nav-width);
   height: 100%;
   background: var(--primary-color);
 

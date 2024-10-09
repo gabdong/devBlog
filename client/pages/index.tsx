@@ -5,14 +5,9 @@ import Post from "./post";
 interface props {
   pathName: string;
 }
-export default function Index(props: props): JSX.Element {
-  console.log(props);
+export default function Index({ pathName }: props): JSX.Element {
   return (
-    <>
-      <div>component</div>
-      <AboutMe></AboutMe>
-      <Post></Post>
-    </>
+    <>{pathName == "/about_me" || pathName == "/" ? <AboutMe /> : <Post />}</>
   );
 }
 
