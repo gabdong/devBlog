@@ -4,10 +4,11 @@ import Link from 'next/link';
 
 import whiteLogo from '../public/images/logo_white.png';
 
-interface props {
+export default function Header({
+  pathName,
+}: {
   pathName: string;
-}
-export default function Header({ pathName }: props): JSX.Element {
+}): JSX.Element {
   return (
     <HeaderWrapSt id="header">
       <LogoWrapSt>

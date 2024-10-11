@@ -4,10 +4,10 @@ import { styled } from 'styled-components';
 import localFont from 'next/font/local';
 import { usePathname } from 'next/navigation';
 
-import '@/styles/globals.css';
+import '@styles/globals.css';
 
-import Nav from '@/components/Nav';
-import Header from '@/components/Header';
+import Nav from '@components/Nav';
+import Header from '@components/Header';
 
 const pretendard = localFont({
   src: '../public/fonts/PretendardVariable.woff2',

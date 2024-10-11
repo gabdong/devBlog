@@ -3,10 +3,7 @@
 import AboutMe from '@/pages/about_me';
 import Post from '@/pages/post';
 
-interface props {
-  pathName: string;
-}
-export default function Index({ pathName }: props): JSX.Element {
+export default function Index({ pathName }: { pathName: string }): JSX.Element {
   return (
     <>{pathName == '/about_me' || pathName == '/' ? <AboutMe /> : <Post />}</>
   );
