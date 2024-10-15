@@ -22,4 +22,13 @@ module.exports = {
     'plugin:import/recommended',
     'plugin:import/typescript',
   ],
+  settings: {
+    'import/resolver': {
+      typescript: {
+        paths: ['./src'],
+        extensions: ['.js', '.ts'],
+      },
+    },
+    'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
+  },
 };

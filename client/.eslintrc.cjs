@@ -30,7 +30,9 @@ module.exports = {
   ],
   settings: {
     'import/resolver': {
-      typescript: {},
+      typescript: {
+        paths: ['./'],
+      },
     },
     'import/parsers': { '@typescript-eslint/parser': ['.ts', '.tsx'] },
   },
@@ -38,5 +40,5 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': ['warn', { extensions: ['.ts', '.tsx'] }],
   },
-  ignorePatterns: ['node_modules/', 'build/', '.eslintrc.cjs'],
+  ignorePatterns: ['node_modules/', 'build/'],
 };
