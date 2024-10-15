@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  ignorePatterns: ['node_modules/', 'dist/'],
+  ignorePatterns: ['node_modules/', 'dist/', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   env: {
     node: true,
