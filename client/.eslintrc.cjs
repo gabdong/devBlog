@@ -11,7 +11,7 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
-    createDefaultProgram: true,
+    createDefaultProgram: false, // tsconfig를 찾지못할경우 ts처리방법 자동설정
     sourceType: 'module',
     ecmaVersion: 'latest',
   },
@@ -25,7 +25,6 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
-    'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
   ],
@@ -39,4 +38,5 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': ['warn', { extensions: ['.ts', '.tsx'] }],
   },
+  ignorePatterns: ['node_modules/', 'build/', '.eslintrc.cjs'],
 };

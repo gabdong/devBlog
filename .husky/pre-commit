@@ -1,2 +1,4 @@
 npm run clientFormat
 npm run clientLint
+npm run serverFormat
+npm run serverLint

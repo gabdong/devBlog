@@ -6,7 +6,9 @@
     "server": "cd server",
     "prepare": "husky",
     "clientFormat": "cd client && npm run format",
-    "clientLint": "cd client && npm run lint"
+    "clientLint": "cd client && npm run lint",
+    "serverFormat": "cd server && npm run format",
+    "serverLint": "cd server && npm run lint"
   },
   "author": "",
   "license": "ISC",
