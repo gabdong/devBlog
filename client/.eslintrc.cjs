@@ -39,6 +39,6 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': ['warn', { extensions: ['.ts', '.tsx'] }],
-    'import/no-named-as-default': 'off',
+    'import/no-named-as-default-member': 'off',
   },
 };
