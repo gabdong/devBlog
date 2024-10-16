@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  ignorePatterns: ['node_modules/', 'build/', 'public/'],
+  ignorePatterns: ['node_modules/', 'build/', 'public/', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser', // ts 구문분석
   env: {
     // 전역객체를 eslint가 인식하는 구간
@@ -31,12 +31,16 @@ module.exports = {
   settings: {
     'import/resolver': {
       typescript: {
-        paths: ['./'],
-        extensions: ['.ts', '.tsx'],
         alwaysTryTypes: true,
+        project: './tsconfig.json',
+      },
+      node: {
+        extensions: ['.ts', '.tsx', '.js', 'jsx'],
       },
     },
-    'import/parsers': { '@typescript-eslint/parser': ['.ts', '.tsx'] },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
   },
   rules: {
     'react/react-in-jsx-scope': 'off',

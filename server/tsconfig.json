@@ -1,5 +1,4 @@
 {
-  "extends": ["./tsconfig.paths.json"],
   "compilerOptions": {
     "allowArbitraryExtensions": false,
     "target": "ES2018",
@@ -11,7 +10,7 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "removeComments": true,
-    "allowJs": true
-  }
+    "removeComments": true
+  },
+  "extends": ["./tsconfig.paths.json"]
 }

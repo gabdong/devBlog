@@ -25,11 +25,15 @@ module.exports = {
   settings: {
     'import/resolver': {
       typescript: {
-        paths: ['./src'],
-        extensions: ['.js', '.ts'],
+        alwaysTryTypes: true,
+      },
+      node: {
+        extensions: ['.ts', 'js'],
       },
     },
-    'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts'],
+    },
   },
   rules: {
     'import/no-named-as-default-member': 'off',

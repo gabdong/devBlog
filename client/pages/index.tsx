@@ -1,7 +1,7 @@
 // import { styled } from 'styled-components';
 
-import AboutMe from '@/pages/about_me';
-import Post from '@/pages/post';
+import AboutMe from '@pages/about_me';
+import Post from '@pages/post';
 
 export default function Index({ pathName }: { pathName: string }): JSX.Element {
   return (

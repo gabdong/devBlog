@@ -1,8 +1,9 @@
 import express from 'express';
-import tagsAPI from '@apis/tags';
+
+// import tagsAPI from '@apis/tags';
 
 const router = express.Router();
 
-router.use('/tags', tagsAPI);
+// router.use('/tags', tagsAPI);
 
 export default router;

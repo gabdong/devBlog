@@ -2,11 +2,12 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 // import bodyParser from 'body-parser';
-import apis from './apis';
+console.log('hi');
+import apis from '@apis';
 
 dotenv.config();
 
-const PORT: number = Number(process.env.port);
+const PORT = Number(process.env.port);
 const app = express();
 
 app.use(
