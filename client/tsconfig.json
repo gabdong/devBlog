@@ -19,11 +19,11 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@/*": ["*"],
       "@components/*": ["components/*"],
       "@apis/*": ["lib/apis/*"],
       "@hooks/*": ["lib/hooks/*"],
       "@uitls/*": ["lib/utils/*"],
+      "@redux/*": ["lib/redux/*"],
       "@styles/*": ["styles/*"],
       "@pages/*": ["pages/*"]
     }

@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 
 import '@styles/globals.css';
 
+import wrapper from '@redux/store';
 import Nav from '@components/Nav';
 import Header from '@components/Header';
 
@@ -16,7 +17,7 @@ const pretendard = localFont({
   variable: '--font-pretendard',
 });
 
-export default function App({ Component, pageProps }: AppProps): JSX.Element {
+function App({ Component, pageProps }: AppProps): JSX.Element {
   console.log('----- App Rendering -----');
   const pathName = usePathname();
 
@@ -37,6 +38,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
             </ComponentContainerSt>
           </ComponentWrapSt>
         </MainSt>
+        <ModalWrapSt />
       </WrapperSt>
     </>
   );
@@ -69,3 +71,10 @@ const ComponentContainerSt = styled.div`
   padding-top: 20px;
   background: purple;
 `;
+const ModalWrapSt = styled.aside`
+  position: fixed;
+  left: 0;
+  top: 0;
+`;
+
+export default wrapper.withRedux(App);

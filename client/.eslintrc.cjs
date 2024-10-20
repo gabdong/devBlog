@@ -32,7 +32,7 @@ module.exports = {
     'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
-        project: './tsconfig.json',
+        project: `${__dirname}/tsconfig.json`,
       },
       node: {
         extensions: ['.ts', '.tsx', '.js', 'jsx'],
@@ -46,5 +46,6 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': ['warn', { extensions: ['.ts', '.tsx'] }],
     'import/no-named-as-default-member': 'off',
+    'import/no-named-as-default': 'off',
   },
 };

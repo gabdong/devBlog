@@ -36,10 +36,12 @@ const NavWrapSt = styled.nav`
 `;
 const SearchPostWrapSt = styled.div`
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 8px 12px;
-  border-radius: 20px;
+  height: 30px;
+  padding: 0px 14px;
+  border-radius: 15px;
   border: 1px solid var(--gray);
 
   & input {

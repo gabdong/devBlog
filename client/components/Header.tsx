@@ -3,12 +3,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import whiteLogo from '../public/images/logo_white.png';
+import Button from '@components/Button';
+
+import { useAppSelector, useAppDispatch } from '@redux/hooks';
+import { setName } from '@redux/slices/user';
+
+function getLoginModal() {
+  console.log('hi');
+}
 
 export default function Header({
   pathName,
 }: {
   pathName: string;
 }): JSX.Element {
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+
   return (
     <HeaderWrapSt id="header">
       <LogoWrapSt>
@@ -33,7 +44,16 @@ export default function Header({
             최근게시물
           </HeaderTabButtonSt>
         </div>
-        <div>테마 로그인</div>
+        <div>
+          <span>테마</span>
+          <span onClick={() => console.log(user)}>테스트</span>
+          <span onClick={() => dispatch(setName('김동환'))}>테스트2</span>
+          <Button
+            text="Login"
+            event={() => getLoginModal()}
+            theme="background"
+          />
+        </div>
       </HeaderContentWrapSt>
     </HeaderWrapSt>
   );
@@ -72,6 +92,7 @@ const HeaderContentWrapSt = styled.div`
 
   & div {
     display: flex;
+    align-items: center;
     gap: 20px;
 
     padding: 20px;
@@ -81,9 +102,14 @@ const HeaderTabButtonSt = styled(Link)`
   padding-bottom: 3px;
   font-size: 14px;
   font-weight: 500;
+  transition: var(--transition);
 
   &.active {
     color: var(--primary-color);
     border-bottom: 0.5px solid var(--primary-color);
+  }
+
+  &:hover {
+    color: var(--primary-color);
   }
 `;

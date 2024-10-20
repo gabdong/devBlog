@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  ignorePatterns: ['node_modules/', 'dist/', '.eslintrc.cjs'],
+  ignorePatterns: ['node_modules/', '.eslintrc.cjs', 'dist/'],
   parser: '@typescript-eslint/parser',
   env: {
     node: true,
@@ -26,9 +26,10 @@ module.exports = {
     'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
+        project: `${__dirname}/tsconfig.json`,
       },
       node: {
-        extensions: ['.ts', 'js'],
+        extensions: ['.js', '.ts'],
       },
     },
     'import/parsers': {

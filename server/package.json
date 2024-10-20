@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon -r tsconfig-paths/register dist/server.js",
+    "start": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
     "build": "tsc -p . && tsc-alias"
@@ -29,6 +29,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "nodemon": "^3.1.7",
     "prettier": "^3.3.3",
+    "ts-node": "^11.0.0-beta.1",
     "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0"
   }
