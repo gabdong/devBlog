@@ -47,5 +47,6 @@ module.exports = {
     'react/jsx-filename-extension': ['warn', { extensions: ['.ts', '.tsx'] }],
     'import/no-named-as-default-member': 'off',
     'import/no-named-as-default': 'off',
+    'no-empty-pattern': 'off',
   },
 };

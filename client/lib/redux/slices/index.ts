@@ -1,11 +1,24 @@
-import { combineReducers } from '@reduxjs/toolkit';
+import { combineReducers, UnknownAction } from '@reduxjs/toolkit';
+import { HYDRATE } from 'next-redux-wrapper';
 
-import user from '@redux/slices/user';
+import user, { UserState } from '@redux/slices/user';
 
-const rootReducer = combineReducers({
+export interface CombinedSliceState {
+  user: UserState;
+}
+const combinedReducer = combineReducers({
   user,
 });
+const rootReducer = (
+  state: CombinedSliceState | undefined,
+  action: UnknownAction,
+) => {
+  switch (action.type) {
+    case HYDRATE:
+      return action.payload;
+    default:
+      return combinedReducer(state, action);
+  }
+};
 
 export default rootReducer;
-
-export type RootState = ReturnType<typeof rootReducer>;

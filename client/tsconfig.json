@@ -22,7 +22,7 @@
       "@components/*": ["components/*"],
       "@apis/*": ["lib/apis/*"],
       "@hooks/*": ["lib/hooks/*"],
-      "@uitls/*": ["lib/utils/*"],
+      "@utils/*": ["lib/utils/*"],
       "@redux/*": ["lib/redux/*"],
       "@styles/*": ["styles/*"],
       "@pages/*": ["pages/*"]

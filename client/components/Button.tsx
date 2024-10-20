@@ -1,7 +1,7 @@
 import { MouseEventHandler } from 'react';
 import styled from 'styled-components';
 
-import { makeClassName } from '@/lib/utils/utils';
+import { makeClassName } from '@utils/utils';
 
 export default function Button({
   text,
