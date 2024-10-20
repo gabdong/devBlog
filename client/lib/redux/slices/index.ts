@@ -6,9 +6,7 @@ import user, { UserState } from '@redux/slices/user';
 export interface CombinedSliceState {
   user: UserState;
 }
-const combinedReducer = combineReducers({
-  user,
-});
+
 const rootReducer = (
   state: CombinedSliceState | undefined,
   action: UnknownAction,
@@ -16,8 +14,12 @@ const rootReducer = (
   switch (action.type) {
     case HYDRATE:
       return action.payload;
-    default:
+    default: {
+      const combinedReducer = combineReducers({
+        user,
+      });
       return combinedReducer(state, action);
+    }
   }
 };
 
