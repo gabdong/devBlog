@@ -39,9 +39,9 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
             </ComponentContainerSt>
           </ComponentWrapSt>
         </MainSt>
-        <ModalWrapSt id="modal">
+        <aside id="modal">
           <ModalContainer />
-        </ModalWrapSt>
+        </aside>
       </WrapperSt>
     </>
   );
@@ -73,11 +73,6 @@ const ComponentContainerSt = styled.div`
   margin: 0 auto;
   padding-top: 20px;
   background: purple;
-`;
-const ModalWrapSt = styled.aside`
-  position: fixed;
-  left: 0;
-  top: 0;
 `;
 
 export default wrapper.withRedux(App);

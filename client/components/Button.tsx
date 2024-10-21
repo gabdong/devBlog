@@ -1,25 +1,41 @@
-import { MouseEventHandler } from 'react';
+import { MouseEvent } from 'react';
 import styled from 'styled-components';
 
 import { makeClassName } from '@utils/utils';
+
+interface ButtonProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+  text: string;
+  event?: (
+    e: MouseEvent<HTMLButtonElement>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ...arg: any[]
+  ) => void | Promise<void>;
+  className?: string[];
+  theme: string;
+  style?: { [key: string]: string };
+}
 
 export default function Button({
   text,
   event,
   className,
   theme,
-}: {
-  text: string;
-  event?: MouseEventHandler<HTMLButtonElement>;
-  className?: string[];
-  theme: string;
-}): JSX.Element {
+  style,
+  ...rest
+}: ButtonProps): JSX.Element {
+  const handleClick = async (e: MouseEvent<HTMLButtonElement>) => {
+    if (event) await event(e, { ...rest });
+  };
+
   return (
     <ButtonSt
       className={
         Array.isArray(className) ? makeClassName([...className, theme]) : theme
       }
-      onClick={event}
+      onClick={handleClick}
+      style={style}
     >
       <span>{text}</span>
     </ButtonSt>
@@ -32,9 +48,10 @@ const ButtonSt = styled.button`
   justify-content: center;
 
   height: 30px;
-  padding: 0 14px;
+  padding: 0 18px;
   border-radius: 15px;
   transition: var(--transition);
+  font-size: 14px;
 
   &.background {
     background: var(--gray);

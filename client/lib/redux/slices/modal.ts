@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+//TODO 모달 한번에 여러개 띄워야할경우 array로 변경
 export interface ModalState {
   type: string;
   props?: object;

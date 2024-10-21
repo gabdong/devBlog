@@ -6,7 +6,7 @@ import { useAppSelector, useAppDispatch } from '@redux/hooks';
 import { setName } from '@redux/slices/user';
 import useModal from '@hooks/useModal';
 
-import whiteLogo from '../public/images/logo_white.png';
+import whiteLogo from '@public/images/logo_white.png';
 import Button from '@components/Button';
 
 export default function Header({
@@ -26,7 +26,7 @@ export default function Header({
     <HeaderWrapSt id="header">
       <LogoWrapSt>
         <Link href="/">
-          <LogoSt src={whiteLogo} alt="logo" />
+          <LogoSt src={whiteLogo} alt="white logo" />
         </Link>
       </LogoWrapSt>
       <HeaderContentWrapSt>
