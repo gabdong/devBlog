@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
-// import bodyParser from 'body-parser';
+import bodyParser from 'body-parser';
 import apis from '@apis';
 
 dotenv.config();
@@ -9,6 +9,8 @@ dotenv.config();
 const PORT = Number(process.env.port);
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(
   cors({
     credentials: false, // 다른 도메인간 쿠키공유 허용여부

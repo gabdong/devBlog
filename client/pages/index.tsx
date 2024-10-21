@@ -1,4 +1,4 @@
-// import { styled } from 'styled-components';
+// import styled from 'styled-components';
 
 import AboutMe from '@pages/about_me';
 import Post from '@pages/post';

@@ -1,13 +1,13 @@
 import { createPortal } from 'react-dom';
 import { ReactPortal } from 'react';
 import styled from 'styled-components';
+import Image from 'next/image';
 
 import useModal from '@hooks/useModal';
 import { useAppSelector } from '@redux/hooks';
 
 import xBtn from '@public/images/x_btn.png';
 import LoginModal from '@components/modals/LoginModal';
-import Image from 'next/image';
 
 const MODAL_MAP: {
   [key: string]: () => JSX.Element;

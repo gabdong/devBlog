@@ -3,22 +3,33 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { MouseEvent } from 'react';
 
+import axios from '@utils/axios';
 import useInput from '@hooks/useInput';
+import useModal from '@hooks/useModal';
+
 import colorLogo from '@public/images/logo_color.png';
 import Button from '@components/Button';
 
 export default function LoginModal(): JSX.Element {
-  const [id, idHandler] = useInput('');
-  const [pw, pwHandler] = useInput('');
+  const [id, idHandler] = useInput('test'); //TODO 기본값 지우기
+  const [pw, pwHandler] = useInput('test'); //TODO 기본값 지우기
+  const { closeModal } = useModal();
 
-  const loginFn = async (
-    e: MouseEvent<HTMLButtonElement>,
-    args: string,
-  ): Promise<void> => {
-    console.log(args);
+  const loginFn = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
     const btn = e.currentTarget;
+    btn.disabled = true;
 
-    console.log(btn);
+    if (!id) return alert('아이디를 입력해주세요.');
+    if (!pw) return alert('패스워드를 입력해주세요.');
+
+    try {
+      await axios.post('/apis/auths/login', { id, pw });
+      closeModal();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      btn.disabled = false;
+    }
   };
 
   return (
@@ -45,8 +56,7 @@ export default function LoginModal(): JSX.Element {
         text="LOGIN"
         theme="border"
         style={{ alignSelf: 'center' }}
-        event={(e: MouseEvent<HTMLButtonElement>, test) => loginFn(e, test)}
-        test="test"
+        event={(e: MouseEvent<HTMLButtonElement>) => loginFn(e)}
       />
     </LoginModalSt>
   );

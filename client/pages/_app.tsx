@@ -1,12 +1,13 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 import localFont from 'next/font/local';
 import { usePathname } from 'next/navigation';
 
 import '@styles/globals.css';
 
 import wrapper from '@redux/store';
+
 import Nav from '@components/Nav';
 import Header from '@components/Header';
 import ModalContainer from '@components/ModalContainer';

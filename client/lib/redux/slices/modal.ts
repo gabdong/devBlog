@@ -21,6 +21,7 @@ export const modalSlice = createSlice({
       state.props = props;
     },
     closeModal: () => {
+      console.log('close modal');
       return initialState;
     },
   },
