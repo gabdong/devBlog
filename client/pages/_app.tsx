@@ -9,6 +9,7 @@ import '@styles/globals.css';
 import wrapper from '@redux/store';
 import Nav from '@components/Nav';
 import Header from '@components/Header';
+import ModalContainer from '@components/ModalContainer';
 
 const pretendard = localFont({
   src: '../public/fonts/PretendardVariable.woff2',
@@ -38,7 +39,9 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
             </ComponentContainerSt>
           </ComponentWrapSt>
         </MainSt>
-        <ModalWrapSt />
+        <ModalWrapSt id="modal">
+          <ModalContainer />
+        </ModalWrapSt>
       </WrapperSt>
     </>
   );

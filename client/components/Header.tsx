@@ -2,15 +2,12 @@ import { styled } from 'styled-components';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import whiteLogo from '../public/images/logo_white.png';
-import Button from '@components/Button';
-
 import { useAppSelector, useAppDispatch } from '@redux/hooks';
 import { setName } from '@redux/slices/user';
+import useModal from '@hooks/useModal';
 
-function getLoginModal() {
-  console.log('hi');
-}
+import whiteLogo from '../public/images/logo_white.png';
+import Button from '@components/Button';
 
 export default function Header({
   pathName,
@@ -19,6 +16,11 @@ export default function Header({
 }): JSX.Element {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const { openModal } = useModal();
+
+  const getLoginModal = () => {
+    openModal({ type: 'login' });
+  };
 
   return (
     <HeaderWrapSt id="header">
@@ -48,11 +50,7 @@ export default function Header({
           <span>테마</span>
           <span onClick={() => console.log(user)}>테스트</span>
           <span onClick={() => dispatch(setName('김동환'))}>테스트2</span>
-          <Button
-            text="Login"
-            event={() => getLoginModal()}
-            theme="background"
-          />
+          <Button text="Login" event={getLoginModal} theme="background" />
         </div>
       </HeaderContentWrapSt>
     </HeaderWrapSt>
