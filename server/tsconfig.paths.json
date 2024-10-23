@@ -3,7 +3,9 @@
     "baseUrl": "./src",
     "paths": {
       "@apis": ["apis/"],
-      "@apis/*": ["apis/*"]
+      "@apis/*": ["apis/*"],
+      "@configs/*": ["configs/*"],
+      "@middlewares/*": ["middlewares/*"]
     }
   }
 }

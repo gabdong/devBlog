@@ -2,13 +2,16 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+
 import apis from '@apis';
+import dbConnection from '@middlewares/db.middleware';
 
 dotenv.config();
 
 const PORT = Number(process.env.port);
 const app = express();
 
+app.use(dbConnection);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(
