@@ -5,14 +5,17 @@ import bodyParser from 'body-parser';
 
 import apis from '@apis';
 import dbConnection from '@middlewares/db.middleware';
+import dbQuery from '@middlewares/db.query';
+import { errorHandler } from '@middlewares/errorHandler';
 
 dotenv.config();
 
 const PORT = Number(process.env.port);
 const app = express();
 
-app.use(dbConnection);
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(dbConnection); // db config
+app.use(dbQuery); // db excute
+app.use(bodyParser.urlencoded({ extended: false })); // 중첩객체 허용여부
 app.use(bodyParser.json());
 app.use(
   cors({
@@ -20,7 +23,8 @@ app.use(
     origin: '*', //TODO 허용할 도메인으로 변경
   }),
 );
-app.use('/apis', apis);
+app.use('/lib/apis', apis);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`app listen on ${PORT}`);

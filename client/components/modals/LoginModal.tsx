@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { MouseEvent } from 'react';
 
-import axios from '@utils/axios';
+import axios, { isAxiosCustomError } from '@utils/axios';
 import useInput from '@hooks/useInput';
 import useModal from '@hooks/useModal';
 
@@ -23,10 +23,18 @@ export default function LoginModal(): JSX.Element {
     if (!pw) return alert('패스워드를 입력해주세요.');
 
     try {
-      await axios.post('/apis/auths/login', { id, pw });
+      const userData = await axios.post('/apis/auths/login', { id, pw });
+      console.log(userData);
       closeModal();
     } catch (err) {
-      console.error(err);
+      if (isAxiosCustomError(err)) {
+        const {
+          status,
+          data: { message },
+        } = err;
+        if (status == 404) return alert(message);
+        alert(message);
+      }
     } finally {
       btn.disabled = false;
     }

@@ -2,10 +2,11 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
-      "@apis": ["apis/"],
-      "@apis/*": ["apis/*"],
-      "@configs/*": ["configs/*"],
-      "@middlewares/*": ["middlewares/*"]
+      "@apis": ["lib/apis/"],
+      "@apis/*": ["lib/apis/*"],
+      "@configs/*": ["lib/configs/*"],
+      "@middlewares/*": ["lib/middlewares/*"],
+      "@utils/*": ["lib/utils/*"]
     }
   }
 }
