@@ -5,21 +5,22 @@ const dbQueryMiddleware = (req: Request, res: Response, next: NextFunction) => {
   req.dbQuery = async (
     query: string,
     param: (string | number)[],
-    errorMessage?: string,
-    errorCode?: number,
+    errorMessage = 'DB Query Error',
+    errorCode = 500,
+    errorAlert = true,
   ) => {
     try {
-      const [rows, fileds] = (await req.db.execute(query, param)) ?? [[], []];
+      const result = (await req.db.execute(query, param)) ?? [[], []];
+      if (!Array.isArray(result)) throw new Error();
 
-      return [rows, fileds] as const;
+      return result;
     } catch (err) {
       if (errorMessage || errorCode) {
-        next(
-          new CustomError(errorMessage ?? 'DB Query Error', errorCode ?? 500),
-        );
+        next(new CustomError(errorMessage, errorCode, errorAlert));
       } else {
         next(err);
       }
+      return [[], []];
     }
   };
 

@@ -10,18 +10,24 @@ export const errorHandler = (
 ) => {
   let statusCode = 500;
   let message = 'Internal Server Error';
+  let errorAlert = true;
 
   if (err instanceof CustomError) {
     statusCode = err.statusCode;
     message = err.message;
+    errorAlert = err.errorAlert;
   }
 
-  res.status(statusCode).json({ message });
+  res.status(statusCode).json({ message, errorAlert });
 };
 
+/**
+ * * async function error handling
+ * @param callback
+ * @returns callback
+ */
 export const asyncErrorHandler = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  callback: (req: Request, res: Response, next: NextFunction) => Promise<any>,
+  callback: (req: Request, res: Response, next: NextFunction) => Promise<void>,
 ) => {
   return (req: Request, res: Response, next: NextFunction) => {
     callback(req, res, next).catch(next);

@@ -9,7 +9,8 @@ declare global {
         param,
         errorMessage?: string,
         errorCode?: number,
-      ) => Promise<readonly [QueryResult, FieldPacket[]] | undefined>;
+        errorAlert?: boolean,
+      ) => Promise<[QueryResult, FieldPacket[]]>;
     }
   }
 }
