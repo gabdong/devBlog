@@ -14,6 +14,7 @@ interface ButtonProps {
   ) => void | Promise<void>;
   className?: string[];
   theme: string;
+  id?: string;
   style?: { [key: string]: string };
 }
 
@@ -23,6 +24,7 @@ export default function Button({
   className,
   theme,
   style,
+  id,
   ...rest
 }: ButtonProps): JSX.Element {
   const handleClick = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -36,6 +38,7 @@ export default function Button({
       }
       onClick={handleClick}
       style={style}
+      id={id}
     >
       <span>{text}</span>
     </ButtonSt>

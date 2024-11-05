@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { useAppSelector, useAppDispatch } from '@redux/hooks';
+import { useAppDispatch, useAppSelector } from '@redux/hooks';
 import { setName } from '@redux/slices/user';
 import useModal from '@hooks/useModal';
 
@@ -14,8 +14,8 @@ export default function Header({
 }: {
   pathName: string;
 }): JSX.Element {
-  const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user);
   const { openModal } = useModal();
 
   const getLoginModal = () => {
@@ -26,7 +26,7 @@ export default function Header({
     <HeaderWrapSt id="header">
       <LogoWrapSt>
         <Link href="/">
-          <LogoSt src={whiteLogo} alt="white logo" />
+          <LogoSt src={whiteLogo} alt="white logo" priority />
         </Link>
       </LogoWrapSt>
       <HeaderContentWrapSt>
@@ -48,8 +48,16 @@ export default function Header({
         </div>
         <div>
           <span>테마</span>
-          <span onClick={() => console.log(user)}>테스트</span>
-          <span onClick={() => dispatch(setName('김동환'))}>테스트2</span>
+          <span
+            onClick={() => {
+              console.log(user);
+            }}
+          >
+            테스트
+          </span>
+          <span onClick={() => dispatch(setName({ name: '김동환' }))}>
+            테스트2
+          </span>
           <Button text="Login" event={getLoginModal} theme="background" />
         </div>
       </HeaderContentWrapSt>

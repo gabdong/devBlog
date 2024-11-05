@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@redux/hooks';
-import { closeModal, ModalState, openModal } from '@redux/slices/modal';
+import { closeModal, openModal } from '@redux/slices/modal';
 
 export default function useModal() {
   const dispatch = useAppDispatch();

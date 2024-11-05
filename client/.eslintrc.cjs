@@ -1,6 +1,12 @@
 module.exports = {
   root: true,
-  ignorePatterns: ['node_modules/', 'build/', 'public/', '.eslintrc.cjs'],
+  ignorePatterns: [
+    'node_modules/',
+    'build/',
+    'public/',
+    '.eslintrc.cjs',
+    'next.config.mjs',
+  ],
   parser: '@typescript-eslint/parser', // ts 구문분석
   env: {
     // 전역객체를 eslint가 인식하는 구간

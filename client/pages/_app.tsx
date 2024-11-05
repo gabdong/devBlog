@@ -2,7 +2,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import styled from 'styled-components';
 import localFont from 'next/font/local';
-import { usePathname } from 'next/navigation';
+import { Provider } from 'react-redux';
 
 import '@styles/globals.css';
 
@@ -19,19 +19,20 @@ const pretendard = localFont({
   variable: '--font-pretendard',
 });
 
-function App({ Component, pageProps }: AppProps): JSX.Element {
+function App({ Component, ...rest }: AppProps): JSX.Element {
   console.log('----- App Rendering -----');
-  const pathName = usePathname();
-
-  pageProps.pathName = pathName;
+  const {
+    store,
+    props: { pageProps },
+  } = wrapper.useWrappedStore(rest);
 
   return (
-    <>
+    <Provider store={store}>
       <Head>
         <title>Gabdong</title>
       </Head>
       <WrapperSt id="wrapper" className={pretendard.variable}>
-        <Header pathName={pathName} />
+        <Header {...pageProps} />
         <MainSt>
           <Nav />
           <ComponentWrapSt className="scroll" id="contentWrap">
@@ -41,10 +42,10 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
           </ComponentWrapSt>
         </MainSt>
         <aside id="modal">
-          <ModalContainer />
+          <ModalContainer {...pageProps} />
         </aside>
       </WrapperSt>
-    </>
+    </Provider>
   );
 }
 
@@ -76,4 +77,4 @@ const ComponentContainerSt = styled.div`
   background: purple;
 `;
 
-export default wrapper.withRedux(App);
+export default App;

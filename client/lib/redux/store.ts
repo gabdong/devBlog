@@ -3,11 +3,12 @@ import { createWrapper } from 'next-redux-wrapper';
 
 import rootReducer, { CombinedSliceState } from '@redux/slices/index';
 
-const store = () =>
-  configureStore({
+const store = () => {
+  return configureStore({
     reducer: rootReducer as Reducer<CombinedSliceState, UnknownAction>,
     devTools: process.env.NODE_ENV !== 'production',
   });
+};
 const wrapper = createWrapper(store);
 
 export type RootState = ReturnType<ReturnType<typeof store>['getState']>;

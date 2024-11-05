@@ -11,10 +11,11 @@ instance.interceptors.response.use(
   },
   (err) => {
     return Promise.reject({
-      status: err.response.status,
+      status: err.response?.status ?? 500,
       statusText: 'FAIL',
       data: {
-        message: err.response.data.message ?? '요청을 실패하였습니다.',
+        message: err.response?.data.message ?? '요청을 실패하였습니다.',
+        errorAlert: err.response?.data.errorAlert ?? true,
       },
     });
   },
@@ -34,6 +35,7 @@ export function isAxiosCustomError(err: any): err is CustomAxiosError {
     'status' in err &&
     'statusText' in err &&
     'data' in err &&
-    'message' in err.data
+    'message' in err.data &&
+    'errorAlert' in err.data
   );
 }

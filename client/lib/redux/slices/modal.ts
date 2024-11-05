@@ -1,11 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-//TODO 모달 한번에 여러개 띄워야할경우 array로 변경
-export interface ModalState {
-  type: string;
-  props?: object;
-}
-
 const initialState: ModalState = {
   type: '',
   props: {},
@@ -20,11 +14,14 @@ export const modalSlice = createSlice({
       state.type = type;
       state.props = props;
     },
-    closeModal: () => {
+    closeModal: (): ModalState => {
+      return initialState;
+    },
+    initializeModal: (): ModalState => {
       return initialState;
     },
   },
 });
 
-export const { openModal, closeModal } = modalSlice.actions;
+export const { openModal, closeModal, initializeModal } = modalSlice.actions;
 export default modalSlice.reducer;
