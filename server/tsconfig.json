@@ -11,7 +11,8 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "removeComments": true,
-    "allowJs": true
+    "allowJs": true,
+    "typeRoots": ["./node_modules/@types", "./src/@types"]
   },
   "extends": ["./tsconfig.paths.json"]
 }

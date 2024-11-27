@@ -2,24 +2,31 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { useAppDispatch, useAppSelector } from '@redux/hooks';
-import { setName } from '@redux/slices/user';
+// import { useAppSelector } from '@redux/hooks';
 import useModal from '@hooks/useModal';
+import { removeToken } from '@utils/auth';
 
 import whiteLogo from '@public/images/logo_white.png';
 import Button from '@components/Button';
+// import { useRouter } from 'next/router';
 
 export default function Header({
   pathName,
 }: {
   pathName: string;
 }): JSX.Element {
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user);
+  // const user = useAppSelector((state) => state.user);
   const { openModal } = useModal();
+  // const router = useRouter();
 
   const getLoginModal = () => {
     openModal({ type: 'login' });
+  };
+
+  //TODO 테스트용 위치변경필요
+  const logoutFn = async () => {
+    await removeToken();
+    // router.reload();
   };
 
   return (
@@ -48,16 +55,7 @@ export default function Header({
         </div>
         <div>
           <span>테마</span>
-          <span
-            onClick={() => {
-              console.log(user);
-            }}
-          >
-            테스트
-          </span>
-          <span onClick={() => dispatch(setName({ name: '김동환' }))}>
-            테스트2
-          </span>
+          <Button text="테스트" event={logoutFn} theme="background" />
           <Button text="Login" event={getLoginModal} theme="background" />
         </div>
       </HeaderContentWrapSt>

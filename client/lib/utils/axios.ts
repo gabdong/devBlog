@@ -1,15 +1,45 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+
+import { checkToken } from '@utils/auth';
+
+const isServer = typeof 'window' === 'undefined';
 
 export const instance: AxiosInstance = axios.create({
+  baseURL: isServer
+    ? `${process.env.REACT_APP_SERVER_URL}/lib`
+    : process.env.REACT_APP_CLIENT_URL,
   timeout: 10000,
   withCredentials: true, // CORS 요청 허용
 });
+
+instance.interceptors.request.use(
+  async (config: InternalAxiosRequestConfig) => {
+    if (!config.data) return config;
+
+    const checkTokenVal = config.data.checkToken || false; // 로그인 판별이 필요한 요청
+    const isCheckToken = config.data.isCheckToken || false; // 토큰정보조회 함수에서 호출 여부
+
+    //* front 요청에서 로그인검증 필요할경우
+    if (checkTokenVal && !isCheckToken) {
+      const checkTokenRes = await checkToken(false);
+      if (checkTokenRes) {
+        const { userData, accessToken } = checkTokenRes;
+
+        if (userData) config.userData = userData;
+        if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
+      }
+    }
+    return config;
+  },
+);
 
 instance.interceptors.response.use(
   (res) => {
     return res;
   },
   (err) => {
+    if (isAxiosCustomError(err)) return err;
+
     return Promise.reject({
       status: err.response?.status ?? 500,
       statusText: 'FAIL',

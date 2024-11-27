@@ -2,6 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: UserState = {
   name: 'guest',
+  isLogin: false,
+  birth: '',
+  auth: 0,
+  datetime: '',
+  email: '',
+  id: '',
+  phone: '',
+  updateDatetime: '',
 };
 
 export const userSlice = createSlice({

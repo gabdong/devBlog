@@ -1,4 +1,5 @@
 import { PoolConnection } from 'mysql2/promise';
+import jwt from 'jsonwebtoken';
 
 declare global {
   namespace Express {
@@ -13,4 +14,14 @@ declare global {
       ) => Promise<[QueryResult, FieldPacket[]]>;
     }
   }
+  type CheckTokenType =
+    | boolean
+    | string
+    | jwt.JwtPayload
+    | undefined
+    | { userIdx: number; iat: number; exp: number };
+
+  type UserState = {
+    name: string;
+  };
 }

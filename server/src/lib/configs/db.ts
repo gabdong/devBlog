@@ -12,6 +12,8 @@ const pool = mysql.createPool({
   port: Number(DB_PORT),
   connectionLimit: 10,
   waitForConnections: true,
+  timezone: 'local',
+  dateStrings: true,
 });
 
 export default pool;

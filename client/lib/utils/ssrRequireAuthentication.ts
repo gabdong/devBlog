@@ -1,9 +1,7 @@
 import { GetServerSidePropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 
-import { getCookieValue } from '@utils/utils';
 import { checkToken } from '@utils/auth';
-import { isAxiosCustomError } from './axios';
 
 const ssrRequireAuthentication =
   (
@@ -34,33 +32,17 @@ const ssrRequireAuthentication =
     };
 
     //* User data
-    const refreshTokenIdx = getCookieValue(
-      'refreshTokenIdx',
-      ctx.req.headers.cookie,
-    );
-    let userData;
-    if (refreshTokenIdx && typeof refreshTokenIdx === 'string') {
-      try {
-        await checkToken(true, refreshTokenIdx);
-      } catch (err) {
-        if (isAxiosCustomError(err)) {
-          console.log(err);
-          const {
-            data: { message, errorAlert },
-          } = err;
-          if (errorAlert) alert(message);
-        } else {
-          console.error(err);
-        }
-      }
-      userData = { name: 'TEST' };
-
-      returnData.userData = userData;
+    try {
+      const checkTokenRes = await checkToken(true, ctx.req.headers.cookie);
+      if (checkTokenRes && checkTokenRes.userData)
+        returnData.userData = checkTokenRes.userData;
+    } catch (err) {
+      console.error(err);
     }
 
     //* GSSP callback
     if (typeof gssp === 'function') {
-      const gsspProps = await gssp(ctx, userData);
+      const gsspProps = await gssp(ctx, returnData.userData);
       if (gsspProps) {
         //* redirect
         if (gsspProps.redirect) {
