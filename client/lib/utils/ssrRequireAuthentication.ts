@@ -33,9 +33,23 @@ const ssrRequireAuthentication =
 
     //* User data
     try {
-      const checkTokenRes = await checkToken(true, ctx.req.headers.cookie);
-      if (checkTokenRes && checkTokenRes.userData)
+      const checkTokenRes = await checkToken(ctx.req.headers.cookie);
+      if (checkTokenRes && checkTokenRes.userData) {
         returnData.userData = checkTokenRes.userData;
+      } else {
+        returnData.userData = {
+          name: 'guest',
+          isLogin: false,
+          auth: 0,
+          birth: '',
+          datetime: '',
+          id: '',
+          phone: '',
+          updateDatetime: '',
+          email: '',
+          accessToken: '',
+        };
+      }
     } catch (err) {
       console.error(err);
     }

@@ -21,12 +21,11 @@ instance.interceptors.request.use(
 
     //* front 요청에서 로그인검증 필요할경우
     if (checkTokenVal && !isCheckToken) {
-      const checkTokenRes = await checkToken(false);
+      const checkTokenRes = await checkToken();
       if (checkTokenRes) {
-        const { userData, accessToken } = checkTokenRes;
+        const { userData } = checkTokenRes;
 
         if (userData) config.userData = userData;
-        if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
       }
     }
     return config;

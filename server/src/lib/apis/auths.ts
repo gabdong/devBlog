@@ -28,6 +28,7 @@ router.post(
     const userIdx = userData.idx;
 
     //* jwt 발급
+    const accessToken = token.access(userIdx);
     const refreshToken = token.refresh(userIdx);
 
     const tokenRes = await req.dbQuery(
@@ -70,11 +71,14 @@ router.post(
       );
     }
 
+    userData.accessToken = accessToken;
+
     res.cookie('refreshTokenHashIdx', tokenHashIdx, {
-      maxAge: 1000 * 60 * 10, // 10분
+      maxAge: 1000 * 10, // 10분 //! TEST용 10초 처리
       httpOnly: true,
+      sameSite: 'strict',
     });
-    res.json({});
+    res.json({ userData });
   }),
 );
 
@@ -82,14 +86,15 @@ router.post(
 router.get(
   '/check-token',
   asyncErrorHandler(async (req, res) => {
-    let newAccessToken = '',
-      newRefreshToken = '',
+    let newRefreshToken = '',
       userIdx = 0;
 
     const refreshTokenHashIdx = getCookieValue(
       'refreshTokenHashIdx',
       req.headers.cookie,
     );
+
+    console.log('checkToken Server : ' + refreshTokenHashIdx);
 
     //* refreshTokenHashIdx 정보 없는경우 않은경우
     if (!refreshTokenHashIdx)
@@ -118,8 +123,7 @@ router.get(
     if (typeof checkRefreshToken === 'object' && checkRefreshToken.userIdx) {
       userIdx = checkRefreshToken.userIdx;
 
-      //* 새로운 토큰 발급
-      newAccessToken = token.access(userIdx);
+      //* refreshToken 재발급
       newRefreshToken = token.refresh(userIdx);
     } else {
       //* 토큰 decode값에 userIdx가 없는경우
@@ -149,7 +153,12 @@ router.get(
     );
 
     userData.isLogin = true;
-    res.json({ userData, accessToken: newAccessToken });
+    res.cookie('refreshTokenHashIdx', 'test', {
+      //! TEST로 10초설정
+      maxAge: 1000 * 10, // 10분
+      httpOnly: true,
+    });
+    res.json({ userData });
   }),
 );
 
@@ -157,6 +166,7 @@ router.get(
 router.delete(
   '/',
   asyncErrorHandler(async (req, res) => {
+    console.log(req.headers.cookie);
     const refreshTokenHashIdx = getCookieValue(
       'refreshTokenHashIdx',
       req.headers.cookie,
@@ -169,12 +179,9 @@ router.delete(
         '갱신토큰 제거를 실패했습니다.',
         500,
       );
-
-      res.cookie('refreshTokenHashIdx', '', {
-        httpOnly: true,
-      });
     }
 
+    res.clearCookie('refreshTokenHashIdx');
     res.json({});
   }),
 );

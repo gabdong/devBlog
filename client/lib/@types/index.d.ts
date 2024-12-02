@@ -22,6 +22,7 @@ type UserState = {
   phone: string;
   updateDatetime: string;
   email: string;
+  accessToken: string;
 };
 
 //TODO 모달 한번에 여러개 띄워야할경우 array로 변경

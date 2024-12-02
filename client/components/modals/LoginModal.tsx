@@ -24,7 +24,10 @@ export default function LoginModal(): JSX.Element {
     if (!pw) return alert('패스워드를 입력해주세요.');
 
     try {
-      await axios.post('/apis/auths/login', { id, pw });
+      await axios.post('/apis/auths/login', {
+        id,
+        pw,
+      });
       router.reload();
     } catch (err) {
       if (isAxiosCustomError(err)) {

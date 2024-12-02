@@ -13,7 +13,7 @@ interface ButtonProps {
     ...arg: any[]
   ) => void | Promise<void>;
   className?: string[];
-  theme: string;
+  theme?: string;
   id?: string;
   style?: { [key: string]: string };
 }
@@ -22,7 +22,7 @@ export default function Button({
   text,
   event,
   className,
-  theme,
+  theme = 'background',
   style,
   id,
   ...rest
@@ -73,6 +73,12 @@ const ButtonSt = styled.button`
 
     &:hover {
       border: 1px solid var(--primary-color);
+    }
+  }
+
+  &.none {
+    &:hover {
+      color: var(--primary-color);
     }
   }
 `;

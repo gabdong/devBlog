@@ -4,15 +4,15 @@ import axios, { isAxiosCustomError } from '@utils/axios';
  * * 토큰정보 조회후 유저정보, 토큰정보를 return 해주는 함수
  */
 export async function checkToken(
-  ssr: boolean,
   cookie?: string,
 ): Promise<{ userData: UserState; accessToken: string } | void> {
-  if (cookie) axios.defaults.headers.cookie = cookie;
-
   try {
     const {
       data: { userData, accessToken },
     } = await axios.get('/apis/auths/check-token', {
+      headers: {
+        Cookie: cookie ?? '',
+      },
       data: {
         isCheckToken: true,
       },

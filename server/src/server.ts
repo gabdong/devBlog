@@ -19,8 +19,8 @@ app.use(bodyParser.urlencoded({ extended: false })); // 중첩객체 허용여�
 app.use(bodyParser.json());
 app.use(
   cors({
-    credentials: false, // 다른 도메인간 쿠키공유 허용여부
-    origin: '*', //TODO 허용할 도메인으로 변경
+    credentials: true, // 다른 도메인간 쿠키공유 허용여부
+    origin: 'http://localhost:3000', //TODO 허용할 도메인으로 변경
   }),
 );
 app.use('/lib/apis', apis);

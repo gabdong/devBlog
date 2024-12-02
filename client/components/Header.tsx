@@ -1,21 +1,21 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 import Link from 'next/link';
+// import { useRouter } from 'next/router';
 
-// import { useAppSelector } from '@redux/hooks';
 import useModal from '@hooks/useModal';
 import { removeToken } from '@utils/auth';
 
 import whiteLogo from '@public/images/logo_white.png';
 import Button from '@components/Button';
-// import { useRouter } from 'next/router';
 
 export default function Header({
   pathName,
+  userData,
 }: {
   pathName: string;
+  userData: UserState;
 }): JSX.Element {
-  // const user = useAppSelector((state) => state.user);
   const { openModal } = useModal();
   // const router = useRouter();
 
@@ -56,7 +56,11 @@ export default function Header({
         <div>
           <span>테마</span>
           <Button text="테스트" event={logoutFn} theme="background" />
-          <Button text="Login" event={getLoginModal} theme="background" />
+          {userData.isLogin ? (
+            <Button text={`${userData.name} 님`} theme="none"></Button>
+          ) : (
+            <Button text="Login" event={getLoginModal} theme="background" />
+          )}
         </div>
       </HeaderContentWrapSt>
     </HeaderWrapSt>
