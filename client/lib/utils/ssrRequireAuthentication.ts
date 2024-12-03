@@ -1,5 +1,6 @@
 import { GetServerSidePropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
+import { serialize } from 'cookie';
 
 import { checkToken } from '@utils/auth';
 
@@ -35,8 +36,60 @@ const ssrRequireAuthentication =
     try {
       const checkTokenRes = await checkToken(ctx.req.headers.cookie);
       if (checkTokenRes && checkTokenRes.userData) {
+        const { refreshTokenHashIdx, accessToken } = checkTokenRes;
+
+        /**
+         * SSR의 경우 express에서 res.cookie로 쿠키설정시 브라우저까지
+         * 정보가 가지않기때문에 별도로 쿠키설정해줌
+         */
+        const refreshTokenHashIdxCookie = serialize(
+          'refreshTokenHashIdx',
+          refreshTokenHashIdx,
+          {
+            maxAge: 60 * 60 * 24, // 1일
+            httpOnly: true,
+            sameSite: 'strict',
+            path: '/',
+            secure: false, //TODO 배포시 true로 변경
+          },
+        );
+        const accessTokenCookie = serialize('accessToken', accessToken, {
+          maxAge: 60 * 15, // 15분
+          httpOnly: true,
+          sameSite: 'strict',
+          path: '/',
+          secure: false, //TODO 배포시 true로 변경
+        });
+        ctx.res.setHeader('Set-Cookie', [
+          refreshTokenHashIdxCookie,
+          accessTokenCookie,
+        ]);
+
         returnData.userData = checkTokenRes.userData;
       } else {
+        /**
+         * SSR의 경우 express에서 res.cookie로 쿠키설정시 브라우저까지
+         * 정보가 가지않기때문에 별도로 쿠키설정해줌
+         */
+        const refreshTokenHashIdxCookie = serialize('refreshTokenHashIdx', '', {
+          maxAge: 0, // 1일
+          httpOnly: true,
+          sameSite: 'strict',
+          path: '/',
+          secure: false, //TODO 배포시 true로 변경
+        });
+        const accessTokenCookie = serialize('accessToken', '', {
+          maxAge: 0, // 15분
+          httpOnly: true,
+          sameSite: 'strict',
+          path: '/',
+          secure: false, //TODO 배포시 true로 변경
+        });
+        ctx.res.setHeader('Set-Cookie', [
+          refreshTokenHashIdxCookie,
+          accessTokenCookie,
+        ]);
+
         returnData.userData = {
           name: 'guest',
           isLogin: false,
@@ -47,7 +100,6 @@ const ssrRequireAuthentication =
           phone: '',
           updateDatetime: '',
           email: '',
-          accessToken: '',
         };
       }
     } catch (err) {

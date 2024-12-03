@@ -44,7 +44,6 @@ instance.interceptors.response.use(
       statusText: 'FAIL',
       data: {
         message: err.response?.data.message ?? '요청을 실패하였습니다.',
-        errorAlert: err.response?.data.errorAlert ?? true,
       },
     });
   },
@@ -64,7 +63,6 @@ export function isAxiosCustomError(err: any): err is CustomAxiosError {
     'status' in err &&
     'statusText' in err &&
     'data' in err &&
-    'message' in err.data &&
-    'errorAlert' in err.data
+    'message' in err.data
   );
 }

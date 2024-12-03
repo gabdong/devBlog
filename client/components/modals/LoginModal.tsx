@@ -32,9 +32,9 @@ export default function LoginModal(): JSX.Element {
     } catch (err) {
       if (isAxiosCustomError(err)) {
         const {
-          data: { message, errorAlert },
+          data: { message },
         } = err;
-        if (errorAlert) alert(message);
+        alert(message);
       } else {
         console.error(err);
       }

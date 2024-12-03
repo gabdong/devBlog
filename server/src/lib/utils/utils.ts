@@ -13,13 +13,12 @@ export const getDbResult = (
   res: [QueryResult, FieldPacket[]],
   message?: string,
   statusCode = 500,
-  errorAlert = true,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): any => {
   if (Array.isArray(res[0])) {
     // 쿼리 결과가 없을경우 에러메세지가 있으면 throw error
     if (res[0].length === 0) {
-      if (message) throw new CustomError(message, statusCode, errorAlert);
+      if (message) throw new CustomError(message, statusCode);
       return null;
     }
     return res[0][0];
@@ -38,8 +37,6 @@ export const getDbResultArr = (res: [QueryResult, FieldPacket[]]): any => {
 
 /**
  * * cookie string에서 원하는 key의 value를 return해주는 함수
- * @param  targetKey
- * @param queryString
  * @returns - target key's value
  */
 export function getCookieValue(
@@ -56,4 +53,30 @@ export function getCookieValue(
   }
 
   return null;
+}
+
+/**
+ * * 현재 line return
+ */
+export function getCurrentLine() {
+  const stack = new Error().stack;
+  if (!stack) return undefined;
+
+  // Extract the third line in the stack trace (the caller of this function)
+  const line = stack.split('\n')[2];
+
+  // Extract line and column info using regex
+  const match = line.match(/:(\d+):\d+/);
+  return match ? parseInt(match[1], 10) : undefined;
+}
+
+/**
+ * * 에러메세지 생성
+ */
+export function buildErrorMessage(
+  message: string,
+  file: string,
+  line?: number,
+): string {
+  return `${message} (ERR_CODE: ${file}_${line})`;
 }

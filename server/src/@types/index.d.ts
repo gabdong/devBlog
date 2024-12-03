@@ -10,7 +10,6 @@ declare global {
         param,
         errorMessage?: string,
         errorCode?: number,
-        errorAlert?: boolean,
       ) => Promise<[QueryResult, FieldPacket[]]>;
     }
   }

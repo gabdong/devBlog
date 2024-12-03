@@ -7,16 +7,14 @@ const dbQueryMiddleware = (req: Request, res: Response, next: NextFunction) => {
     param: (string | number)[],
     errorMessage = 'DB Query Error',
     errorCode = 500,
-    errorAlert = true,
   ) => {
     try {
       const result = (await req.db.execute(query, param)) ?? [[], []];
-      if (!Array.isArray(result)) throw new Error();
 
       return result;
     } catch (err) {
       if (errorMessage || errorCode) {
-        next(new CustomError(errorMessage, errorCode, errorAlert));
+        next(new CustomError(errorMessage, errorCode));
       } else {
         next(err);
       }

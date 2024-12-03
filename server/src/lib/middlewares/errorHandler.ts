@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { CustomError } from 'lib/utils/customError';
 
+/**
+ * * express error handling
+ */
 export const errorHandler = (
   err: Error | CustomError,
   req: Request,
@@ -10,21 +13,17 @@ export const errorHandler = (
 ) => {
   let statusCode = 500;
   let message = 'Internal Server Error';
-  let errorAlert = true;
 
   if (err instanceof CustomError) {
     statusCode = err.statusCode;
     message = err.message;
-    errorAlert = err.errorAlert;
   }
 
-  res.status(statusCode).json({ message, errorAlert });
+  res.status(statusCode).json({ message });
 };
 
 /**
  * * async function error handling
- * @param callback
- * @returns callback
  */
 export const asyncErrorHandler = (
   callback: (req: Request, res: Response, next: NextFunction) => Promise<void>,
