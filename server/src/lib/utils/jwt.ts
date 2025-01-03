@@ -32,7 +32,7 @@ const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 
 const token = {
   /**
-   * access token 발급
+   * - access token 발급
    */
   access: (userIdx: number): string => {
     return jwt.sign({ userIdx }, ACCESS_TOKEN_SECRET, {
@@ -41,7 +41,7 @@ const token = {
     });
   },
   /**
-   * refresh token 발급
+   * - refresh token 발급
    */
   refresh: (userIdx: number): string => {
     return jwt.sign({ userIdx }, REFRESH_TOKEN_SECRET, {
@@ -50,18 +50,24 @@ const token = {
     });
   },
   /**
-   * 토큰 검증
+   * - 토큰 검증
    */
   check: (token?: string, mode = 'access'): CheckTokenType => {
-    if (!token) return false;
+    if (typeof token !== 'string') return false;
 
     const secretKey =
       mode == 'access' ? ACCESS_TOKEN_SECRET : REFRESH_TOKEN_SECRET;
 
-    const result = jwt.verify(token, secretKey, (err, decodedData) => {
-      if (err) return false;
-      return decodedData;
-    }) as CheckTokenType;
+    const result = (<unknown>jwt.verify(
+      token,
+      secretKey,
+      (err, decodedData) => {
+        if (err) return false;
+        return decodedData;
+      },
+    )) as CheckTokenType;
+
+    if (result && !result.userIdx) return false;
 
     return result;
   },

@@ -139,11 +139,24 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .pointer {
   cursor: pointer;
 }
+.headline {
+  font-family: 'SUIT-Medium';
+  font-size: 34px;
+  letter-spacing: 0.25px;
+}
 .subTitle {
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.15px;
-  color: #ffffff;
+}
+.smallTitle {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+}
+.normalText {
+  font-family: 'SUIT-Regular';
+  font-size: 14px;
 }
 .caption {
   font-size: 12px;

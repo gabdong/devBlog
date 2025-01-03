@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: ['@uiw/react-md-editor'],
+  experimental: { esmExternals: true },
   reactStrictMode: false,
   swcMinify: true,
   compiler: {

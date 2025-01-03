@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { CustomError } from '@utils/customError';
 
+/**
+ * - express db query middleware
+ */
 const dbQueryMiddleware = (req: Request, res: Response, next: NextFunction) => {
   req.dbQuery = async (
     query: string,

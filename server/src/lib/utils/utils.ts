@@ -3,7 +3,7 @@ import { FieldPacket, QueryResult } from 'mysql2';
 import { CustomError } from '@utils/customError';
 
 /**
- * * 쿼리결과 첫번째값을 리턴하는 함수
+ * - 쿼리결과 첫번째값을 리턴하는 함수
  * @param res - 쿼리 결과값
  * @param message - 결과 없을경우 에러메세지
  * @param statusCode - 결과 없을경우 에러코드
@@ -26,7 +26,7 @@ export const getDbResult = (
 };
 
 /**
- * * 쿼리결과 배열 리턴하는 함수
+ * - 쿼리결과 배열 리턴하는 함수
  * @param res - 쿼리 결과값
  * @returns 쿼리 결과 배열
  */
@@ -36,7 +36,7 @@ export const getDbResultArr = (res: [QueryResult, FieldPacket[]]): any => {
 };
 
 /**
- * * cookie string에서 원하는 key의 value를 return해주는 함수
+ * - cookie string에서 원하는 key의 value를 return해주는 함수
  * @returns - target key's value
  */
 export function getCookieValue(
@@ -56,22 +56,20 @@ export function getCookieValue(
 }
 
 /**
- * * 현재 line return
+ * - 현재 line return
  */
 export function getCurrentLine() {
   const stack = new Error().stack;
   if (!stack) return undefined;
 
-  // Extract the third line in the stack trace (the caller of this function)
   const line = stack.split('\n')[2];
 
-  // Extract line and column info using regex
   const match = line.match(/:(\d+):\d+/);
   return match ? parseInt(match[1], 10) : undefined;
 }
 
 /**
- * * 에러메세지 생성
+ * - 에러메세지 생성
  */
 export function buildErrorMessage(
   message: string,

@@ -1,5 +1,5 @@
-import { MouseEvent } from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
 
 import { makeClassName } from '@utils/utils';
 
@@ -7,38 +7,29 @@ interface ButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
   text: string;
-  event?: (
-    e: MouseEvent<HTMLButtonElement>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ...arg: any[]
-  ) => void | Promise<void>;
+  href: string;
   className?: string[];
-  theme?: 'background' | 'border' | 'none';
+  theme?: string;
   id?: string;
   icon?: JSX.Element;
   style?: { [key: string]: string };
 }
 
-export default function Button({
+export default function LinkButton({
   text,
-  event,
+  href,
   className,
   theme = 'background',
   style,
   id,
   icon,
-  ...rest
 }: ButtonProps): JSX.Element {
-  const handleClick = async (e: MouseEvent<HTMLButtonElement>) => {
-    if (event) await event(e, { ...rest });
-  };
-
   return (
     <ButtonSt
       className={
         Array.isArray(className) ? makeClassName([...className, theme]) : theme
       }
-      onClick={handleClick}
+      href={href}
       style={style}
       id={id}
     >
@@ -48,7 +39,7 @@ export default function Button({
   );
 }
 
-const ButtonSt = styled.button`
+const ButtonSt = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,7 +53,8 @@ const ButtonSt = styled.button`
   &.background {
     background: var(--gray);
 
-    &:hover {
+    &:hover,
+    &.active {
       background: var(--primary-color);
     }
     & span {
@@ -74,14 +66,17 @@ const ButtonSt = styled.button`
     border: 1px solid var(--gray);
     background: none;
 
-    &:hover {
+    &:hover,
+    &.active {
       border: 1px solid var(--primary-color);
     }
   }
 
   &.none {
     padding: 0;
-    &:hover {
+
+    &:hover,
+    &.active {
       color: var(--primary-color);
     }
   }

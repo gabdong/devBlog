@@ -7,7 +7,7 @@ const isServer = typeof 'window' === 'undefined';
 export const instance: AxiosInstance = axios.create({
   baseURL: isServer
     ? `${process.env.REACT_APP_SERVER_URL}/lib`
-    : process.env.REACT_APP_CLIENT_URL,
+    : process.env.REACT_APP_CLIENT_URL, // client는 next config에서 rewrite중
   timeout: 10000,
   withCredentials: true, // CORS 요청 허용
 });
@@ -21,11 +21,15 @@ instance.interceptors.request.use(
 
     //* front 요청에서 로그인검증 필요할경우
     if (checkTokenVal && !isCheckToken) {
-      const checkTokenRes = await checkToken();
-      if (checkTokenRes) {
-        const { userData } = checkTokenRes;
+      try {
+        const checkTokenRes = await checkToken();
+        if (checkTokenRes) {
+          const { userData } = checkTokenRes;
 
-        if (userData) config.userData = userData;
+          if (userData) config.data.userData = userData;
+        }
+      } catch (err) {
+        if (isAxiosCustomError(err)) return Promise.reject(err);
       }
     }
     return config;
@@ -37,7 +41,7 @@ instance.interceptors.response.use(
     return res;
   },
   (err) => {
-    if (isAxiosCustomError(err)) return err;
+    if (isAxiosCustomError(err)) return Promise.reject(err);
 
     return Promise.reject({
       status: err.response?.status ?? 500,

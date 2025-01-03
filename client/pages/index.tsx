@@ -1,21 +1,46 @@
 import ssrRequireAuthentication from '@utils/ssrRequireAuthentication';
 
-import AboutMe from '@pages/about_me';
-import Post from '@pages/post';
+import AboutMe from '@components/AboutMe';
+import PostList from '@components/PostList';
+import { getPostList } from '@apis/posts';
 
-export default function Index({ ...pageProps }: PageProps): JSX.Element {
-  console.log(pageProps);
-  const { pathName } = pageProps;
+interface IndexPageProps extends PageProps {
+  query: { tab?: string };
+  gsspProps?: { postList: PostData[] };
+}
+
+export default function Index({
+  query: { tab },
+  ...rest
+}: IndexPageProps): JSX.Element {
+  const postList =
+    tab === 'latest_content' && rest.gsspProps ? rest.gsspProps.postList : [];
 
   return (
     <>
-      {pathName == '/about_me' || pathName == '/' ? (
-        <AboutMe {...pageProps} />
+      {tab === 'latest_content' ? (
+        <PostList postList={postList} />
       ) : (
-        <Post {...pageProps} />
+        <AboutMe />
       )}
     </>
   );
 }
 
-export const getServerSideProps = ssrRequireAuthentication();
+export const getServerSideProps = ssrRequireAuthentication(
+  async (ctx, userData) => {
+    const { tab } = ctx.query;
+    if (tab === 'latest_content') {
+      const getPostListRes = await getPostList(
+        'latest',
+        1,
+        12,
+        false,
+        userData,
+      );
+      const { postList } = getPostListRes;
+
+      return { postList };
+    }
+  },
+);

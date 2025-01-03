@@ -1,32 +1,41 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 import Link from 'next/link';
-// import { useRouter } from 'next/router';
+import { BsChevronDown } from 'react-icons/bs';
+import { MouseEvent, useState } from 'react';
 
 import useModal from '@hooks/useModal';
-import { removeToken } from '@utils/auth';
 
 import whiteLogo from '@public/images/logo_white.png';
 import Button from '@components/Button';
+import UserMenuWrap from '@components/header/UserMenuWrap';
+import LinkButton from '@components/LinkButton';
+
+interface HeaderProps extends PageProps {
+  query: { tab?: string };
+}
 
 export default function Header({
   pathName,
+  query: { tab },
   userData,
-}: {
-  pathName: string;
-  userData: UserState;
-}): JSX.Element {
+}: HeaderProps) {
   const { openModal } = useModal();
-  // const router = useRouter();
+  const [userMenuWrapView, setUserMenuWrapView] = useState(false);
 
-  const getLoginModal = () => {
-    openModal({ type: 'login' });
+  /**
+   * - user menu wrap handler
+   */
+  const userMenuWrapHandler = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setUserMenuWrapView((prev) => !prev);
   };
 
-  //TODO 테스트용 위치변경필요
-  const logoutFn = async () => {
-    await removeToken();
-    // router.reload();
+  /**
+   * - 로그인 모달
+   */
+  const getLoginModal = () => {
+    openModal({ type: 'login' });
   };
 
   return (
@@ -40,24 +49,37 @@ export default function Header({
         <div>
           <HeaderTabButtonSt
             className={
-              pathName == '/about_me' || pathName == '/' ? 'active' : ''
+              pathName === '/' && tab !== 'latest_content' ? 'active' : ''
             }
-            href="/about_me/?tab=about_me"
+            href="/?tab=about_me"
           >
             About Me
           </HeaderTabButtonSt>
           <HeaderTabButtonSt
-            className={pathName == '/post' ? 'active' : ''}
-            href="/post/?tab=latest_content"
+            className={
+              pathName === '/' && tab === 'latest_content' ? 'active' : ''
+            }
+            href="/?tab=latest_content"
           >
             최근게시물
           </HeaderTabButtonSt>
         </div>
+
         <div>
           <span>테마</span>
-          <Button text="테스트" event={logoutFn} theme="background" />
+          {userData.isLogin && <LinkButton href="/editor/new" text="글작성" />}
           {userData.isLogin ? (
-            <Button text={`${userData.name} 님`} theme="none"></Button>
+            <div style={{ position: 'relative' }}>
+              <Button
+                text={`${userData.name} 님`}
+                theme="none"
+                icon={<BsChevronDown />}
+                event={userMenuWrapHandler}
+              ></Button>
+              {userMenuWrapView && (
+                <UserMenuWrap setViewState={setUserMenuWrapView} />
+              )}
+            </div>
           ) : (
             <Button text="Login" event={getLoginModal} theme="background" />
           )}
@@ -98,10 +120,10 @@ const HeaderContentWrapSt = styled.div`
   flex: 1;
   justify-content: space-between;
 
-  & div {
+  & > div {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 14px;
 
     padding: 20px;
   }

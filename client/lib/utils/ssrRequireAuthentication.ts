@@ -1,17 +1,22 @@
 import { GetServerSidePropsContext } from 'next';
-import { ParsedUrlQuery } from 'querystring';
 import { serialize } from 'cookie';
+import { ParsedUrlQuery } from 'querystring';
 
 import { checkToken } from '@utils/auth';
+import { getTagList } from '@apis/tags';
+
+interface GsspReturnProps {
+  pathName: string;
+  query: ParsedUrlQuery;
+  gsspProps?: unknown;
+  userData: UserState;
+  tagList: TagData[];
+  totalPostCnt: number;
+  privatePostCnt: number;
+}
 
 const ssrRequireAuthentication =
-  (
-    gssp?: (
-      ctx?: GetServerSidePropsContext,
-      userData?: UserState,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ) => any,
-  ) =>
+  (gssp?: (ctx: GetServerSidePropsContext, userData: UserState) => unknown) =>
   async (ctx: GetServerSidePropsContext) => {
     //* URL data
     const protocol =
@@ -21,20 +26,31 @@ const ssrRequireAuthentication =
     const fullUrl = `${protocol}://${host}${resolvedUrl}`;
     const pathName = new URL(fullUrl).pathname;
 
-    const returnData: {
-      pathName: string;
-      query: ParsedUrlQuery;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      gsspProps?: any;
-      userData?: UserState;
-    } = {
+    //* return data initial
+    const returnData: GsspReturnProps = {
       pathName,
       query: ctx.query,
+      userData: {
+        idx: 0,
+        name: 'guest',
+        isLogin: false,
+        auth: 0,
+        birth: '',
+        datetime: '',
+        id: '',
+        phone: '',
+        updateDatetime: '',
+        email: '',
+      },
+      tagList: [],
+      totalPostCnt: 0,
+      privatePostCnt: 0,
     };
 
     //* User data
     try {
       const checkTokenRes = await checkToken(ctx.req.headers.cookie);
+
       if (checkTokenRes && checkTokenRes.userData) {
         const { refreshTokenHashIdx, accessToken } = checkTokenRes;
 
@@ -67,19 +83,16 @@ const ssrRequireAuthentication =
 
         returnData.userData = checkTokenRes.userData;
       } else {
-        /**
-         * SSR의 경우 express에서 res.cookie로 쿠키설정시 브라우저까지
-         * 정보가 가지않기때문에 별도로 쿠키설정해줌
-         */
+        // 로그인 정보 없을경우 쿠키 제거
         const refreshTokenHashIdxCookie = serialize('refreshTokenHashIdx', '', {
-          maxAge: 0, // 1일
+          maxAge: 0,
           httpOnly: true,
           sameSite: 'strict',
           path: '/',
           secure: false, //TODO 배포시 true로 변경
         });
         const accessTokenCookie = serialize('accessToken', '', {
-          maxAge: 0, // 15분
+          maxAge: 0,
           httpOnly: true,
           sameSite: 'strict',
           path: '/',
@@ -89,21 +102,35 @@ const ssrRequireAuthentication =
           refreshTokenHashIdxCookie,
           accessTokenCookie,
         ]);
-
-        returnData.userData = {
-          name: 'guest',
-          isLogin: false,
-          auth: 0,
-          birth: '',
-          datetime: '',
-          id: '',
-          phone: '',
-          updateDatetime: '',
-          email: '',
-        };
       }
     } catch (err) {
-      console.error(err);
+      console.error(err, 'from GSSP() 93');
+    }
+
+    //* Tag Data
+    try {
+      const { tagList, totalPostCnt, privatePostCnt } = await getTagList({
+        userData: returnData.userData,
+      });
+
+      if (tagList.length > 0) returnData.tagList = tagList;
+      if (totalPostCnt > 0) returnData.totalPostCnt = totalPostCnt;
+      if (privatePostCnt > 0 && returnData.userData.isLogin)
+        returnData.privatePostCnt = privatePostCnt;
+    } catch (err) {
+      console.error(err, 'from GSSP() 104');
+    }
+
+    //* Private Page redirect
+    const privatePage = ['private', 'settings', 'write'];
+    for (const privateKey of privatePage) {
+      if (resolvedUrl.includes(privateKey) && !returnData.userData.isLogin) {
+        return {
+          redirect: {
+            destination: '/401',
+          },
+        };
+      }
     }
 
     //* GSSP callback
@@ -111,14 +138,18 @@ const ssrRequireAuthentication =
       const gsspProps = await gssp(ctx, returnData.userData);
       if (gsspProps) {
         //* redirect
-        if (gsspProps.redirect) {
+        if (typeof gsspProps === 'object' && 'redirect' in gsspProps) {
           return {
             redirect: {
               destination: gsspProps.redirect,
             },
-            props: {},
+            props: {
+              returnData,
+            },
           };
         }
+
+        //* GSSP return data
         returnData.gsspProps = gsspProps;
       }
     }

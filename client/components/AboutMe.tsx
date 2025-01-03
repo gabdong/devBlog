@@ -1,8 +1,8 @@
 import ssrRequireAuthentication from '@utils/ssrRequireAuthentication';
 
-export default function AboutMe({ ...pageProps }: PageProps): JSX.Element {
+export default function AboutMe({ ...pageProps }) {
   console.log(pageProps);
-  return <div>about_me</div>;
+  return <div style={{ height: '1000px', background: 'green' }}>about_me</div>;
 }
 
 export const getServerSideProps = ssrRequireAuthentication();

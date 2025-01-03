@@ -5,12 +5,15 @@ import localFont from 'next/font/local';
 import { Provider } from 'react-redux';
 
 import '@styles/globals.css';
+import '@styles/markdown-editor.css';
+import '@styles/markdown.css';
 
 import wrapper from '@redux/store';
 
 import Nav from '@components/Nav';
-import Header from '@components/Header';
+import Header from '@components/header/Header';
 import ModalContainer from '@components/ModalContainer';
+import { makeClassName } from '../lib/utils/utils';
 
 const pretendard = localFont({
   src: '../public/fonts/PretendardVariable.woff2',
@@ -26,15 +29,24 @@ function App({ Component, ...rest }: AppProps): JSX.Element {
     props: { pageProps },
   } = wrapper.useWrappedStore(rest);
 
+  const errorPages = ['/401', '/404', '/500', '/_error'];
+  const pathname = rest.router.route;
+  const isNoHeader = errorPages.includes(pathname);
+  const isNoNav = errorPages.includes(pathname);
+  const noHeaderClass = isNoHeader ? 'isNoHeader' : '';
+
   return (
     <Provider store={store}>
       <Head>
         <title>Gabdong</title>
       </Head>
-      <WrapperSt id="wrapper" className={pretendard.variable}>
-        <Header {...pageProps} />
+      <WrapperSt
+        id="wrapper"
+        className={makeClassName([pretendard.variable, noHeaderClass])}
+      >
+        {!isNoHeader && <Header {...pageProps} />}
         <MainSt>
-          <Nav />
+          {!isNoNav && <Nav {...pageProps} />}
           <ComponentWrapSt className="scroll" id="contentWrap">
             <ComponentContainerSt id="contentContainer">
               <Component {...pageProps} />
@@ -57,11 +69,14 @@ const WrapperSt = styled.div`
   height: 100%;
   font-family: var(--font-pretendard);
   user-select: none;
+
+  &:not(.isNoHeader) main {
+    max-height: calc(100% - var(--header-height));
+  }
 `;
 const MainSt = styled.main`
   display: flex;
   flex: 1;
-  max-height: calc(100% - var(--header-height));
 `;
 const ComponentWrapSt = styled.div`
   flex: 1;
@@ -73,8 +88,7 @@ const ComponentContainerSt = styled.div`
   width: 1400px;
   max-width: 90%;
   margin: 0 auto;
-  padding-top: 20px;
-  background: purple;
+  padding: 20px 0;
 `;
 
 export default App;
