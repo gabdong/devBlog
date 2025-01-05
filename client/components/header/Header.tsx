@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BsChevronDown } from 'react-icons/bs';
+import { BsChevronDown, BsJustify } from 'react-icons/bs';
 import { MouseEvent, useState } from 'react';
 
 import useModal from '@hooks/useModal';
 
 import whiteLogo from '@public/images/logo_white.png';
+import colorLogo from '@public/images/logo_color.png';
 import Button from '@components/Button';
 import UserMenuWrap from '@components/header/UserMenuWrap';
 import LinkButton from '@components/LinkButton';
@@ -14,6 +15,17 @@ import LinkButton from '@components/LinkButton';
 interface HeaderProps extends PageProps {
   query: { tab?: string };
 }
+
+/**
+ * - mobile nav open
+ */
+const navOpen = () => {
+  const nav = document.getElementById('nav');
+  const background = document.getElementById('navBackground');
+
+  if (nav) nav.classList.add('active');
+  if (background) background.classList.add('active');
+};
 
 export default function Header({
   pathName,
@@ -40,13 +52,25 @@ export default function Header({
 
   return (
     <HeaderWrapSt id="header">
-      <LogoWrapSt>
+      <NavIconSt className="mobileOnly" onClick={navOpen} />
+      <LogoWrapSt className="logoWrap">
         <Link href="/">
-          <LogoSt src={whiteLogo} alt="white logo" priority />
+          <LogoSt
+            src={whiteLogo}
+            alt="white logo"
+            priority
+            className="pcOnly logo"
+          />
+          <MobileLogoSt
+            src={colorLogo}
+            alt="color logo"
+            priority
+            className="mobileOnly logo"
+          />
         </Link>
       </LogoWrapSt>
       <HeaderContentWrapSt>
-        <div>
+        <div className="headerTabButtonWrap">
           <HeaderTabButtonSt
             className={
               pathName === '/' && tab !== 'latest_content' ? 'active' : ''
@@ -66,8 +90,15 @@ export default function Header({
         </div>
 
         <div>
-          <span>테마</span>
-          {userData.isLogin && <LinkButton href="/editor/new" text="글작성" />}
+          {/* //TODO 테마변경기능 */}
+          {/* <span>테마</span> */}
+          {userData.isLogin && (
+            <LinkButton
+              href="/editor/new"
+              text="글작성"
+              className={['writePostBtn']}
+            />
+          )}
           {userData.isLogin ? (
             <div style={{ position: 'relative' }}>
               <Button
@@ -96,6 +127,23 @@ const HeaderWrapSt = styled.header`
   width: 100%;
   height: var(--header-height);
   border-bottom: 0.5px solid var(--primary-color);
+
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
+    justify-content: space-between;
+
+    padding: 0 20px;
+    position: relative;
+
+    & .logoWrap {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+`;
+const NavIconSt = styled(BsJustify)`
+  font-size: 24px;
 `;
 const LogoWrapSt = styled.div`
   width: var(--nav-width);
@@ -110,8 +158,17 @@ const LogoWrapSt = styled.div`
     width: 100%;
     height: 100%;
   }
+
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
+    width: auto;
+    background: none;
+  }
 `;
 const LogoSt = styled(Image)`
+  width: 50%;
+  height: auto;
+`;
+const MobileLogoSt = styled(Image)`
   width: 50%;
   height: auto;
 `;
@@ -119,13 +176,25 @@ const HeaderContentWrapSt = styled.div`
   display: flex;
   flex: 1;
   justify-content: space-between;
+  padding: 0 20px;
 
   & > div {
     display: flex;
     align-items: center;
     gap: 14px;
+  }
 
-    padding: 20px;
+  & .headerTabButtonWrap,
+  & .writePostBtn {
+    @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
+      display: none;
+    }
+  }
+
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
+    justify-content: end;
+
+    padding: 0;
   }
 `;
 const HeaderTabButtonSt = styled(Link)`

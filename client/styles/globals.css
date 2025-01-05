@@ -157,9 +157,26 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .normalText {
   font-family: 'SUIT-Regular';
   font-size: 14px;
+  letter-spacing: 0.2px;
 }
 .caption {
   font-size: 12px;
   font-weight: 400;
   color: var(--gray-l-2);
+}
+
+/** mobile, pc only **/
+.mobileOnly {
+  display: none;
+}
+.pcOnly {
+  display: block;
+}
+@media all and (max-width: 767px) {
+  .mobileOnly {
+      display: block;
+  }
+  .pcOnly {
+      display: none;
+  }
 }

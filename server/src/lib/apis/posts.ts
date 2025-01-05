@@ -150,7 +150,6 @@ router.put(
       userData: UserState;
     } = req.body;
     const { postIdx } = req.params;
-    console.log(req.params);
 
     if (!userData.isLogin)
       throw new CustomError(

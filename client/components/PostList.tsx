@@ -7,32 +7,38 @@ export default function PostList({ postList }: { postList: PostData[] }) {
   return (
     <PostListWrapSt>
       <h2 hidden>게시글 리스트</h2>
-      {postList.map((data) => {
-        return (
-          <PostItemSt key={data.idx}>
-            <Link href={`/post/${data.idx}`}>
-              <div className="postThumbnailWrap">
-                {/* //TODO 썸네일적용 */}
-                {/* {data.thumbnail ? (
+      {postList.length === 0 ? (
+        <h2 className="subTitle">게시글이 존재하지 않습니다.</h2>
+      ) : (
+        postList.map((data) => {
+          return (
+            <PostItemSt key={data.idx}>
+              <Link href={`/post/${data.idx}`}>
+                <div className="postThumbnailWrap">
+                  {/* //TODO 썸네일적용 */}
+                  {/* {data.thumbnail ? (
                 <Image src={data.thumbnail} alt="게시글 썸네일" />
               ) : ( */}
-                <div className="postInitialThumbnail">
-                  <BsImage />
+                  <div className="postInitialThumbnail">
+                    <BsImage />
+                  </div>
+                  {/* )} */}
                 </div>
-                {/* )} */}
-              </div>
-              <div className="postInfoWrap">
-                <h3 className="postSubject subTitle">{data.subject}</h3>
-                <p className="postContent normalText">{data.subtitle}</p>
-                <div>
-                  <BsCalendar2DateFill />
-                  <span className="postDatetime caption">{data.datetime}</span>
+                <div className="postInfoWrap">
+                  <h3 className="postSubject subTitle">{data.subject}</h3>
+                  <p className="postContent normalText">{data.subtitle}</p>
+                  <div>
+                    <BsCalendar2DateFill />
+                    <span className="postDatetime caption">
+                      {data.datetime}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          </PostItemSt>
-        );
-      })}
+              </Link>
+            </PostItemSt>
+          );
+        })
+      )}
     </PostListWrapSt>
   );
 }

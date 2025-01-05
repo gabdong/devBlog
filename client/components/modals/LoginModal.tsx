@@ -62,7 +62,7 @@ export default function LoginModal(): JSX.Element {
           />
           <AccountBtnWrapSt>
             <Link href="/">
-              <span className="caption">Forgot your ID? Or Password?</span>
+              <span className="caption">Forgot your ID or PW?</span>
             </Link>
             <Link href="/">
               <span className="caption">Create Account</span>

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 import { removeToken } from '@utils/auth';
+import Link from 'next/link';
 
 /**
  * - 로그인했을경우 이름영역 클릭시 보이는 드롭다운
@@ -49,11 +50,14 @@ export default function UserMenuWrap({
   return (
     <UserMenuWrapSt id="userMenuWrap">
       {/* //TODO */}
-      <li className="menuWrapBtn normalText" onClick={logoutFn}>
+      {/* <li className="menuWrapBtn normalText" onClick={logoutFn}>
         MyPage
-      </li>
+      </li> */}
       <li className="menuWrapBtn normalText" onClick={logoutFn}>
         Logout
+      </li>
+      <li className="menuWrapBtn normalText">
+        <Link href="/editor/new">글작성</Link>
       </li>
     </UserMenuWrapSt>
   );

@@ -13,7 +13,7 @@ import wrapper from '@redux/store';
 import Nav from '@components/Nav';
 import Header from '@components/header/Header';
 import ModalContainer from '@components/ModalContainer';
-import { makeClassName } from '../lib/utils/utils';
+import { makeClassName } from '@utils/utils';
 
 const pretendard = localFont({
   src: '../public/fonts/PretendardVariable.woff2',

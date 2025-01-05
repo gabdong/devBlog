@@ -94,4 +94,13 @@ const ButtonSt = styled.button`
   & > span {
     font-size: 14px;
   }
+
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
+    height: 24px;
+    padding: 0 14px;
+
+    &:hover {
+      color: inherit !important;
+    }
+  }
 `;

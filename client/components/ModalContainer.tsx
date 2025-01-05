@@ -27,7 +27,7 @@ export default function ModalContainer(): ReactPortal | null {
     <>
       <ModalContainerSt>
         <XBtnSt onClick={closeModal}>
-          <Image src={xBtn} alt="x_button" />
+          <Image src={xBtn} alt="close button" />
         </XBtnSt>
         <Modal {...props} />
       </ModalContainerSt>
