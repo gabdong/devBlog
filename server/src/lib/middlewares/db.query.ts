@@ -7,7 +7,7 @@ import { CustomError } from '@utils/customError';
 const dbQueryMiddleware = (req: Request, res: Response, next: NextFunction) => {
   req.dbQuery = async (
     query: string,
-    param: (string | number)[],
+    param: unknown[],
     errorMessage = 'DB Query Error',
     errorCode = 500,
   ) => {

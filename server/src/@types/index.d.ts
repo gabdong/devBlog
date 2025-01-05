@@ -17,8 +17,9 @@ declare global {
 
   //- User data type
   interface UserState {
+    idx: number;
     name: string;
-    isLogin?: boolean;
+    isLogin: boolean;
     auth: number;
     birth: string;
     datetime: string;
@@ -26,5 +27,12 @@ declare global {
     phone: string;
     updateDatetime: string;
     email: string;
+  }
+
+  //- Tag data type
+  interface TagData {
+    idx: number;
+    name: string;
+    postCnt: number;
   }
 }

@@ -78,3 +78,10 @@ export function buildErrorMessage(
 ): string {
   return `${message} (ERR_CODE: ${file}_${line})`;
 }
+
+/**
+ * - SQL 변수갯수가 일정하지 않을때 placeholder 만들어주는 함수
+ */
+export function buildQueryPlaceholder(arr: unknown[]): string {
+  return arr.map(() => '?').join(',');
+}

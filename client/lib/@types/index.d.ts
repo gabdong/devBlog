@@ -45,7 +45,7 @@ interface PostData {
   datetime?: string;
   writerIdx?: number;
   memberName?: string;
-  html?: string;
+  tagNameData?: string[];
 }
 
 //- Editor props type

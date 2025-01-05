@@ -85,6 +85,7 @@ export async function uploadPost(
   postData: PostData,
   router: NextRouter,
 ) {
+  //TODO 썸네일
   // if (postData.uploadThumbnail) {
   //   // 썸네일 업로드
   //   const { uploadThumbnail, thumbnailAlt } = postData;
@@ -100,8 +101,21 @@ export async function uploadPost(
   //     if (err.response?.data.msg) console.error(err.response.data.msg);
   //   }
   // }
-  //TODO Tag 선택없을경우 비공개저장
 
+  //* 태그없을경우 비공개
+  if (
+    !postData.tagNameData ||
+    (postData.tagNameData &&
+      postData.tagNameData.length === 0 &&
+      isPublic == 'Y')
+  ) {
+    if (!confirm('태그가 설정되어있지 않습니다. 비공개로 저장하시겠습니까?'))
+      return;
+
+    isPublic = 'N';
+  }
+
+  //* 필수 입력 확인
   if (!postData.subject) return alert('제목을 입력해주세요.');
   if (!postData.subtitle) return alert('부제목을 입력해주세요.');
   if (!postData.content) return alert('내용을 입력해주세요.');
@@ -131,7 +145,6 @@ export async function uploadPost(
 /**
  * - 게시글 수정
  */
-//TODO tag 없을경우 비공개
 export async function editPost(
   postIdx: number,
   isPublic: string,
@@ -155,7 +168,19 @@ export async function editPost(
   //   }
   // }
 
-  console.log(postData);
+  //* 태그없을경우 비공개
+  if (
+    !postData.tagNameData ||
+    (postData.tagNameData &&
+      postData.tagNameData.length === 0 &&
+      isPublic == 'Y')
+  ) {
+    if (!confirm('태그가 설정되어있지 않습니다. 비공개로 저장하시겠습니까?'))
+      return;
+
+    isPublic = 'N';
+  }
+
   if (!postData.subject) return alert('제목을 입력해주세요.');
   if (!postData.subtitle) return alert('부제목을 입력해주세요.');
   if (!postData.content) return alert('내용을 입력해주세요.');

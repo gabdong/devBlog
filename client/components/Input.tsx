@@ -47,11 +47,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 const InputSt = styled.input<{
   $border?: 'all' | 'left' | 'right' | 'top' | 'bottom';
 }>`
-  padding: 8px 12px;
   ${(props) =>
     props.$border == 'all'
-      ? 'border: 1px solid #ddd;'
-      : `border-${props.$border}: 1px solid #ddd;`}
+      ? 'border: 1px solid #ddd; padding: 8px 12px;'
+      : `border-${props.$border}: 1px solid #ddd; padding: 8px 4px;`}
   ${(props) =>
     props.$border == 'all' ? 'border-radius: var(--border-radius);' : ''}
   cursor: pointer;

@@ -7,20 +7,29 @@ import {
   getCurrentLine,
   getDbResult,
   getDbResultArr,
+  buildQueryPlaceholder,
 } from '@utils/utils';
 
 const CURRENT_FILE = 'POST';
 const router = express.Router();
 
 //- 게시글 업로드
-//TODO 태그없을경우 비공개
 router.post(
   '/',
   asyncErrorHandler(async (req, res) => {
     const {
-      postData: { subject, content, subtitle },
+      postData: { subject, content, subtitle, tagNameData },
       isPublic,
       userData,
+    }: {
+      postData: {
+        subject: string;
+        content: string;
+        subtitle: string;
+        tagNameData: string[];
+      };
+      isPublic: 'Y' | 'N';
+      userData: UserState;
     } = req.body;
 
     if (!userData.isLogin)
@@ -33,17 +42,87 @@ router.post(
         401,
       );
 
+    if (tagNameData.length === 0 && isPublic == 'Y') {
+      throw new CustomError(
+        buildErrorMessage(
+          '태그정보가 없으면 공개로 저장할수 없습니다.',
+          CURRENT_FILE,
+          getCurrentLine(),
+        ),
+        500,
+      );
+    }
+
+    //* 저장할 태그정보
+    const saveTagData: number[] = [];
+    if (tagNameData.length > 0) {
+      //* 기존 태그정보
+      const getTagDataPlaceholder = buildQueryPlaceholder(tagNameData);
+      const getTagDataRes = await req.dbQuery(
+        `
+        SELECT * 
+        FROM tags 
+        WHERE name IN (${getTagDataPlaceholder})
+      `,
+        tagNameData,
+        buildErrorMessage(
+          '태그 정보를 불러오지 못했습니다.',
+          CURRENT_FILE,
+          getCurrentLine(),
+        ),
+        500,
+      );
+      const getTagDataResult: TagData[] = getDbResultArr(getTagDataRes);
+
+      const addTagNameList = tagNameData.filter((name) => {
+        const match = getTagDataResult.find((item) => item.name === name);
+        if (match) {
+          saveTagData.push(match.idx);
+          return false;
+        }
+
+        return true;
+      });
+
+      //* 기존에 없던 태그 추가
+      if (addTagNameList.length > 0) {
+        for (const name of addTagNameList) {
+          const insertTagRes = await req.dbQuery(
+            'INSERT INTO tags SET name=?, member=?',
+            [name, userData.idx],
+            buildErrorMessage(
+              '태그를 저장하지 못했습니다.',
+              CURRENT_FILE,
+              getCurrentLine(),
+            ),
+            500,
+          );
+          const insertTagData = insertTagRes[0];
+          const { insertId: tagIdx } = insertTagData;
+
+          saveTagData.push(tagIdx);
+        }
+      }
+    }
+
     const { idx: userIdx } = userData;
 
-    //TODO 태그 추가
     const insertPostRes = await req.dbQuery(
       'INSERT INTO posts SET subject=?, subtitle=?, content=?, public=?, member=?, auth=0, tags=?',
-      [subject, subtitle, content, isPublic, userIdx, '[]'],
+      [
+        subject,
+        subtitle,
+        content,
+        isPublic,
+        userIdx,
+        JSON.stringify(saveTagData),
+      ],
       buildErrorMessage(
         '게시글 등록을 실패했습니다.',
         CURRENT_FILE,
         getCurrentLine(),
       ),
+      500,
     );
     const insertPostData = insertPostRes[0];
     const { insertId: postIdx } = insertPostData;
@@ -53,14 +132,22 @@ router.post(
 );
 
 //- 게시글 수정
-//TODO 태그없을경우 비공개
 router.put(
   '/:postIdx',
   asyncErrorHandler(async (req, res) => {
     const {
-      postData: { subject, content, subtitle },
+      postData: { subject, content, subtitle, tagNameData },
       isPublic,
       userData,
+    }: {
+      postData: {
+        subject: string;
+        content: string;
+        subtitle: string;
+        tagNameData: string[];
+      };
+      isPublic: 'Y' | 'N';
+      userData: UserState;
     } = req.body;
     const { postIdx } = req.params;
     console.log(req.params);
@@ -75,12 +162,82 @@ router.put(
         401,
       );
 
+    if (tagNameData.length === 0 && isPublic == 'Y') {
+      throw new CustomError(
+        buildErrorMessage(
+          '태그정보가 없으면 공개로 저장할수 없습니다.',
+          CURRENT_FILE,
+          getCurrentLine(),
+        ),
+        500,
+      );
+    }
+
+    //* 저장할 태그정보
+    const saveTagData: number[] = [];
+    if (tagNameData.length > 0) {
+      //* 기존 태그정보
+      const getTagDataPlaceholder = buildQueryPlaceholder(tagNameData);
+      const getTagDataRes = await req.dbQuery(
+        `
+        SELECT * 
+        FROM tags 
+        WHERE name IN (${getTagDataPlaceholder})
+      `,
+        tagNameData,
+        buildErrorMessage(
+          '태그 정보를 불러오지 못했습니다.',
+          CURRENT_FILE,
+          getCurrentLine(),
+        ),
+        500,
+      );
+      const getTagDataResult: TagData[] = getDbResultArr(getTagDataRes);
+
+      const addTagNameList = tagNameData.filter((name) => {
+        const match = getTagDataResult.find((item) => item.name === name);
+        if (match) {
+          saveTagData.push(match.idx);
+          return false;
+        }
+
+        return true;
+      });
+
+      //* 기존에 없던 태그 추가
+      if (addTagNameList.length > 0) {
+        for (const name of addTagNameList) {
+          const insertTagRes = await req.dbQuery(
+            'INSERT INTO tags SET name=?, member=?',
+            [name, userData.idx],
+            buildErrorMessage(
+              '태그를 저장하지 못했습니다.',
+              CURRENT_FILE,
+              getCurrentLine(),
+            ),
+            500,
+          );
+          const insertTagData = insertTagRes[0];
+          const { insertId: tagIdx } = insertTagData;
+
+          saveTagData.push(tagIdx);
+        }
+      }
+    }
+
     const { idx: userIdx } = userData;
 
-    //TODO 태그 추가
     const updatePostRes = await req.dbQuery(
       'UPDATE posts SET subject=?, subtitle=?, content=?, public=?, member=?, auth=0, tags=? WHERE idx=?',
-      [subject, subtitle, content, isPublic, userIdx, '[]', postIdx],
+      [
+        subject,
+        subtitle,
+        content,
+        isPublic,
+        userIdx,
+        JSON.stringify(saveTagData),
+        postIdx,
+      ],
       buildErrorMessage(
         '게시글 수정을 실패했습니다.',
         CURRENT_FILE,
@@ -228,6 +385,27 @@ router.get(
         buildErrorMessage('권한이 없습니다.', CURRENT_FILE, getCurrentLine()),
         401,
       );
+
+    //
+    postData.tagNameData = [];
+    if (postData.tags.length > 0) {
+      const placeholder = buildQueryPlaceholder(postData.tags);
+      const getTagNameRes = await req.dbQuery(
+        `
+        SELECT name FROM tags WHERE idx IN (${placeholder})
+        `,
+        postData.tags,
+        buildErrorMessage(
+          '태그 정보를 불러오지 못했습니다.',
+          CURRENT_FILE,
+          getCurrentLine(),
+        ),
+        500,
+      );
+      const tagNameData: { name: string }[] = getDbResultArr(getTagNameRes);
+
+      postData.tagNameData = tagNameData.map((data) => data.name);
+    }
 
     res.json({ postData });
   }),

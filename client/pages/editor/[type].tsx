@@ -24,23 +24,68 @@ export default function Write({ ...pageProps }: WritePageProps) {
   const router = useRouter();
 
   const { type } = pageProps.query;
-  const [subject, subjectHandler, setSubject] = useInput(postData.subject);
-  const [subtitle, subtitleHandler, setSubtitle] = useInput(postData.subtitle);
-  const [content, setContent] = useState<string>(postData.content);
+  const [subject, subjectHandler, setSubject] = useInput('');
+  const [subtitle, subtitleHandler, setSubtitle] = useInput('');
+  const [content, setContent] = useState<string>('');
+  const [addTagName, addTagNameHandler, setAddTagName] = useInput('');
+  const [addedTagList, setAddedTagList] = useState([] as string[]);
 
   useEffect(() => {
     setSubject(postData.subject);
-    setSubtitle(postData.subtitle);
     setContent(postData.content);
+    setSubtitle(postData.subtitle || '');
+    setAddedTagList(postData.tagNameData ? [...postData.tagNameData] : []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postData.idx]);
 
   return (
     <EditorWrapSt>
       {/* //* 태그추가 */}
-      <SearchTagWrapSt>
-        <h3 className="smallTitle">태그</h3>
-      </SearchTagWrapSt>
+      <SettingInputWrapSt>
+        <h3 className="smallTitle">
+          태그<span className="caption"> (미선택시 비공개)</span>
+        </h3>
+        <TagSettingWrapSt>
+          <Input
+            defaultValue={addTagName}
+            onChange={addTagNameHandler}
+            onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === 'Enter' && addTagName) {
+                if (addedTagList.includes(addTagName))
+                  return alert('이미 선택된 태그입니다.');
+                setAddedTagList((prev) => [...prev, addTagName]);
+                setAddTagName('');
+              }
+            }}
+            border="bottom"
+            style={{ color: 'var(--gray-l)', flex: 1 }}
+            placeholder="입력 후 엔터로 추가해주세요."
+          />
+          <AddedTagListSt>
+            {addedTagList.length > 0 ? (
+              addedTagList.map((tagName) => (
+                <AddedTagItemSt
+                  key={tagName}
+                  className="caption"
+                  data-tag-name={tagName}
+                  onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                    const target = e.target as HTMLDivElement;
+                    const removeName = target.dataset.tagName;
+
+                    setAddedTagList((prev) => [
+                      ...prev.filter((name) => name !== removeName),
+                    ]);
+                  }}
+                >
+                  {tagName}
+                </AddedTagItemSt>
+              ))
+            ) : (
+              <span className="caption">선택된 태그가 없습니다.</span>
+            )}
+          </AddedTagListSt>
+        </TagSettingWrapSt>
+      </SettingInputWrapSt>
 
       {/* //* 제목설정 */}
       <SettingInputWrapSt>
@@ -92,11 +137,15 @@ export default function Write({ ...pageProps }: WritePageProps) {
               return editPost(
                 postData.idx,
                 'N',
-                { subject, subtitle, content },
+                { subject, subtitle, content, tagNameData: addedTagList },
                 router,
               );
             } else {
-              return uploadPost('N', { subject, subtitle, content }, router);
+              return uploadPost(
+                'N',
+                { subject, subtitle, content, tagNameData: addedTagList },
+                router,
+              );
             }
           }}
         />
@@ -109,11 +158,15 @@ export default function Write({ ...pageProps }: WritePageProps) {
               return editPost(
                 postData.idx,
                 'Y',
-                { subject, subtitle, content },
+                { subject, subtitle, content, tagNameData: addedTagList },
                 router,
               );
             } else {
-              return uploadPost('Y', { subject, subtitle, content }, router);
+              return uploadPost(
+                'Y',
+                { subject, subtitle, content, tagNameData: addedTagList },
+                router,
+              );
             }
           }}
         />
@@ -129,65 +182,32 @@ const EditorWrapSt = styled.article`
 
   width: 100%;
 `;
-// const SelectedTagsWrapSt = styled.div`
-//   display: flex;
-//   align-items: center;
-//   gap: 8px;
-// `;
-// const SelectedTagsItemSt = styled.div`
-//   padding: var(--small-box-padding);
-//   border-radius: var(--border-radius);
-//   background: var(--dark-l-o);
-//   transition: var(--transition);
-//   cursor: pointer;
-
-//   & > .caption {
-//     color: var(--primary-color-d-text);
-//   }
-//   &:hover {
-//     background: var(--dark-l);
-//   }
-// `;
-// const ThumbnailSettingWrapSt = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   gap: 10px;
-// `;
-// const ThumbnailPreivewWrapSt = styled.div`
-//   height: 120px;
-//   padding: 8px;
-//   border: 1px solid #dddddd;
-//   border-radius: var(--border-radius);
-// `;
-// const ThumbnailImgSt = styled.img`
-//   height: 100%;
-// `;
-const SearchTagWrapSt = styled.div`
+const TagSettingWrapSt = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 100%;
-  position: relative;
 `;
-// const SearchTagResultWrapSt = styled.div`
-//   display: none;
-//   gap: 8px;
+const AddedTagListSt = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 
-//   width: 100%;
-//   padding: var(--box-padding);
-//   background: var(--dark);
-//   border: 1px solid var(--gray);
-//   border-radius: var(--border-radius);
-//   position: absolute;
-//   top: calc(100% + 10px);
+  padding: 8px 12px;
+`;
+const AddedTagItemSt = styled.div`
+  display: flex;
+  padding: 8px 12px;
+  border: 1px solid var(--gray-l);
+  border-radius: var(--border-radius);
+  color: var(--gray-l);
+  cursor: pointer;
+  transition: var(--transition);
 
-//   &.active {
-//     display: flex;
-//     align-items: center;
-//     flex-wrap: wrap;
-//     z-index: 1;
-//   }
-// `;
+  &:hover {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+`;
 const SettingInputWrapSt = styled.div`
   display: flex;
   flex-direction: column;
