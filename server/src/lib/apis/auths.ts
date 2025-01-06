@@ -29,9 +29,8 @@ router.post(
         400,
       );
 
-    //TODO 비밀번호 암호화
     const userRes = await req.dbQuery(
-      'SELECT idx, auth, id, name, phone, birth, email FROM members WHERE id=? AND password=?',
+      'SELECT idx, auth, id, name, phone, birth, email FROM members WHERE id=? AND password=UPPER(SHA1(UNHEX(SHA1("?"))))',
       [id, pw],
       buildErrorMessage(
         '회원정보 조회를 실패했습니다.',
