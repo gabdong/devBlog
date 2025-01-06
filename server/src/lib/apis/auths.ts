@@ -30,7 +30,7 @@ router.post(
       );
 
     const userRes = await req.dbQuery(
-      'SELECT idx, auth, id, name, phone, birth, email FROM members WHERE id=? AND password=UPPER(SHA1(UNHEX(SHA1("?"))))',
+      'SELECT idx, auth, id, name, phone, birth, email FROM members WHERE id=? AND password=UPPER(SHA1(UNHEX(SHA1(?))))',
       [id, pw],
       buildErrorMessage(
         '회원정보 조회를 실패했습니다.',
