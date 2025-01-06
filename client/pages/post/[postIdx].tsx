@@ -108,6 +108,7 @@ const PostInfoWrapSt = styled.div`
 `;
 const PostButtonWrapSt = styled.div`
   display: flex;
+  align-items: center;
   gap: 8px;
 
   & > .buttonText {

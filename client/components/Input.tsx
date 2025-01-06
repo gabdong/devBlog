@@ -50,7 +50,7 @@ const InputSt = styled.input<{
   ${(props) =>
     props.$border == 'all'
       ? 'border: 1px solid #ddd; padding: 8px 12px;'
-      : `border-${props.$border}: 1px solid #ddd; padding: 8px 4px;`}
+      : `border-${props.$border}: 1px solid #ddd; padding: 8px 4px; border-radius: 0;`}
   ${(props) =>
     props.$border == 'all' ? 'border-radius: var(--border-radius);' : ''}
   cursor: pointer;
