@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
 
 import { deletePost, getPost } from '@apis/posts';
 import { isAxiosCustomError } from '@utils/axios';
@@ -74,7 +75,9 @@ export default function Post({ ...pageProps }: PostPageProps): JSX.Element {
 
       {/* //* 내용 */}
       <PostContentSt>
-        <ReactMarkdown>{postData.content}</ReactMarkdown>
+        <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+          {postData.content}
+        </ReactMarkdown>
       </PostContentSt>
     </PostWrapSt>
   );
@@ -132,6 +135,47 @@ const ThumbnailWrapSt = styled.div`
 `;
 const PostContentSt = styled.div`
   word-break: break-all;
+
+  & h1 {
+    margin: 0.67rem 0;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--gray-l);
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  & h2 {
+    margin: 0.67rem 0;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--gray-l);
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  & h3 {
+    margin: 0.67rem 0;
+    padding-bottom: 0.3rem;
+    font-size: 1.17rem;
+  }
+
+  & h4 {
+    margin: 0.67rem 0;
+    padding-bottom: 0.3rem;
+    font-size: 1rem;
+  }
+
+  & h5 {
+    margin: 0.67rem 0;
+    padding-bottom: 0.3rem;
+    font-size: 0.875rem;
+  }
+
+  & h6 {
+    margin: 0.67rem 0;
+    padding-bottom: 0.3rem;
+    font-size: 0.85rem;
+    color: var(--gray-l);
+  }
 `;
 
 export const getServerSideProps = ssrRequireAuthentication(

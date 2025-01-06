@@ -10,8 +10,8 @@ import colorLogo from '@public/images/logo_color.png';
 import Button from '@components/Button';
 
 export default function LoginModal(): JSX.Element {
-  const [id, idHandler] = useInput('test'); //TODO 기본값 지우기
-  const [pw, pwHandler] = useInput('test'); //TODO 기본값 지우기
+  const [id, idHandler] = useInput('');
+  const [pw, pwHandler] = useInput('');
   const router = useRouter();
 
   const loginFn = async (): Promise<void> => {
