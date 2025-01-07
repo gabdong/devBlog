@@ -10,8 +10,10 @@ import Link from 'next/link';
  */
 export default function UserMenuWrap({
   setViewState,
+  userData,
 }: {
   setViewState: React.Dispatch<React.SetStateAction<boolean>>;
+  userData: UserState;
 }) {
   const router = useRouter();
 
@@ -56,9 +58,11 @@ export default function UserMenuWrap({
       <li className="menuWrapBtn normalText" onClick={logoutFn}>
         Logout
       </li>
-      <li className="menuWrapBtn normalText">
-        <Link href="/editor/new">글작성</Link>
-      </li>
+      {userData.auth > 1 && (
+        <li className="menuWrapBtn normalText mobileOnly">
+          <Link href="/editor/new">글작성</Link>
+        </li>
+      )}
     </UserMenuWrapSt>
   );
 }

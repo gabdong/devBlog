@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import styled from 'styled-components';
 
 /**
- * * Input
+ * - Input
  * @param {String} border all, top, bottom, left, right
  * @param {String} accept 파일일경우 확장자
  */
@@ -55,6 +55,7 @@ const InputSt = styled.input<{
     props.$border == 'all' ? 'border-radius: var(--border-radius);' : ''}
   cursor: pointer;
   transition: var(--transition);
+  color: var(--gray-l);
 
   &:active,
   &:focus,
@@ -63,6 +64,10 @@ const InputSt = styled.input<{
       props.$border == 'all'
         ? 'border: 1px solid var(--primary-color);'
         : `border-${props.$border} : 1px solid var(--primary-color);`}
+  }
+
+  &::placeholder {
+    color: var(--gray-l-2);
   }
 `;
 

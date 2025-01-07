@@ -1,19 +1,26 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import axios, { isAxiosCustomError } from '@utils/axios';
 import useInput from '@hooks/useInput';
+import useModal from '@hooks/useModal';
 
 import colorLogo from '@public/images/logo_color.png';
+
 import Button from '@components/Button';
+import Input from '@components/Input';
 
 export default function LoginModal(): JSX.Element {
+  const { openModal } = useModal();
   const [id, idHandler] = useInput('');
   const [pw, pwHandler] = useInput('');
   const router = useRouter();
 
+  /**
+   * - 로그인
+   */
   const loginFn = async (): Promise<void> => {
     const btn: HTMLButtonElement = document.getElementById(
       'login_btn',
@@ -43,30 +50,44 @@ export default function LoginModal(): JSX.Element {
     }
   };
 
+  /**
+   * - 회원가입 모달
+   */
+  const getSignUpModal = () => {
+    openModal({ type: 'signUp' });
+  };
+
   return (
     <LoginModalSt className="modalContent">
       <LogoSt src={colorLogo} alt="color logo" />
-      <LoginFromSt
+      <LoginFormSt
         onSubmit={(e) => {
           e.preventDefault();
           loginFn();
         }}
       >
         <InputWrapSt>
-          <input type="text" placeholder="ID" value={id} onChange={idHandler} />
-          <input
+          <Input
+            type="text"
+            placeholder="ID"
+            defaultValue={id}
+            onChange={idHandler}
+            border="bottom"
+          />
+          <Input
             type="password"
             placeholder="PASSWORD"
-            value={pw}
+            defaultValue={pw}
             onChange={pwHandler}
+            border="bottom"
           />
           <AccountBtnWrapSt>
-            <Link href="/">
+            {/* <Link href="/">
               <span className="caption">Forgot your ID or PW?</span>
-            </Link>
-            <Link href="/">
-              <span className="caption">Create Account</span>
-            </Link>
+            </Link> */}
+            <span className="caption" onClick={getSignUpModal}>
+              Create Account
+            </span>
           </AccountBtnWrapSt>
         </InputWrapSt>
         <Button
@@ -75,7 +96,7 @@ export default function LoginModal(): JSX.Element {
           style={{ alignSelf: 'center' }}
           id="login_btn"
         />
-      </LoginFromSt>
+      </LoginFormSt>
     </LoginModalSt>
   );
 }
@@ -95,7 +116,7 @@ const LogoSt = styled(Image)`
   max-width: 50%;
   height: auto;
 `;
-const LoginFromSt = styled.form`
+const LoginFormSt = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -107,16 +128,13 @@ const InputWrapSt = styled.div`
   gap: 14px;
 
   width: 100%;
-
-  & input {
-    width: 100%;
-    padding-bottom: 4px;
-    border-bottom: 0.5px solid var(--gray-l-2);
-    color: var(--gray-l);
-  }
 `;
 const AccountBtnWrapSt = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+
+  & span {
+    cursor: pointer;
+  }
 `;

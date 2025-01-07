@@ -13,6 +13,27 @@ import {
 const CURRENT_FILE = 'AUTH';
 const router = express.Router();
 
+router.post(
+  '/signup',
+  asyncErrorHandler(async (req, res) => {
+    const { id, pw, name, phone, email, birth } = req.body;
+
+    //TODO 중복체크
+    await req.dbQuery(
+      'INSERT INTO members SET id=?, password=UPPER(SHA1(UNHEX(SHA1(?)))), name=?, phone=?, email=?, birth=?, auth=1',
+      [id, pw, name, phone, email, birth],
+      buildErrorMessage(
+        '회원가입을 실패했습니다.',
+        CURRENT_FILE,
+        getCurrentLine(),
+      ),
+      500,
+    );
+
+    res.json({});
+  }),
+);
+
 //- 로그인
 router.post(
   '/login',

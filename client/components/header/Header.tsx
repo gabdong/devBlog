@@ -92,7 +92,7 @@ export default function Header({
         <div>
           {/* //TODO 테마변경기능 */}
           {/* <span>테마</span> */}
-          {userData.isLogin && (
+          {userData.isLogin && userData.auth > 1 && (
             <LinkButton
               href="/editor/new"
               text="글작성"
@@ -108,7 +108,10 @@ export default function Header({
                 event={userMenuWrapHandler}
               ></Button>
               {userMenuWrapView && (
-                <UserMenuWrap setViewState={setUserMenuWrapView} />
+                <UserMenuWrap
+                  setViewState={setUserMenuWrapView}
+                  userData={userData}
+                />
               )}
             </div>
           ) : (
