@@ -87,23 +87,6 @@ export async function uploadPost(
   postData: PostData,
   router: NextRouter,
 ) {
-  //TODO 썸네일
-  // if (postData.uploadThumbnail) {
-  //   // 썸네일 업로드
-  //   const { uploadThumbnail, thumbnailAlt } = postData;
-
-  //   try {
-  //     const uploadThumbnailRes = await uploadImage(
-  //       uploadThumbnail,
-  //       thumbnailAlt,
-  //     );
-  //     const thumbnail = uploadThumbnailRes.idx;
-  //     postData.thumbnail = thumbnail;
-  //   } catch (err) {
-  //     if (err.response?.data.msg) console.error(err.response.data.msg);
-  //   }
-  // }
-
   //* 태그없을경우 비공개
   if (
     !postData.tagNameData ||
@@ -153,23 +136,6 @@ export async function editPost(
   postData: PostData,
   router: NextRouter,
 ) {
-  // if (postData.uploadThumbnail) {
-  //   // 썸네일 업로드
-  //   const { uploadThumbnail, thumbnailAlt } = postData;
-
-  //   try {
-  //     const uploadThumbnailRes = await uploadImage(
-  //       uploadThumbnail,
-  //       thumbnailAlt,
-  //     );
-  //     const thumbnail = uploadThumbnailRes.idx;
-
-  //     postData.thumbnail = thumbnail;
-  //   } catch (err) {
-  //     if (err.response?.data.msg) console.error(err.response.data.msg);
-  //   }
-  // }
-
   //* 태그없을경우 비공개
   if (
     !postData.tagNameData ||

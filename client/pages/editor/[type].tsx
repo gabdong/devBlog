@@ -4,13 +4,15 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import { editPost, getPost, uploadPost } from '@apis/posts';
-import useInput from '@hooks/useInput';
 import ssrRequireAuthentication from '@utils/ssrRequireAuthentication';
+import { isAxiosCustomError } from '@utils/axios';
+import useInput from '@hooks/useInput';
+import useModal from '@hooks/useModal';
 
 import Input from '@components/Input';
 import Editor from '@components/Editor';
 import Button from '@components/Button';
-import { isAxiosCustomError } from '@utils/axios';
+import Image from 'next/image';
 
 interface WritePageProps extends PageProps {
   query: { type: string };
@@ -22,6 +24,7 @@ export default function Write({ ...pageProps }: WritePageProps) {
     gsspProps: { postData },
   } = pageProps;
   const router = useRouter();
+  const { openModal } = useModal();
 
   const { type } = pageProps.query;
   const [subject, subjectHandler, setSubject] = useInput('');
@@ -29,19 +32,58 @@ export default function Write({ ...pageProps }: WritePageProps) {
   const [content, setContent] = useState<string>('');
   const [addTagName, addTagNameHandler, setAddTagName] = useInput('');
   const [addedTagList, setAddedTagList] = useState([] as string[]);
+  const [thumbnailIdx, setThumbnailIdx] = useState<number>(0);
+  const [thumbnailUrl, setThumbnailUrl] = useState<string>('');
+  const [thumbnailAlt, setThumbnailAlt] = useState<string>('');
 
   useEffect(() => {
     setSubject(postData.subject);
     setContent(postData.content);
     setSubtitle(postData.subtitle || '');
     setAddedTagList(postData.tagNameData ? [...postData.tagNameData] : []);
+    setThumbnailIdx(postData.thumbnailIdx || 0);
+    setThumbnailUrl(postData.thumbnailUrl || '');
+    setThumbnailAlt(postData.thumbnailAlt || '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postData.idx]);
 
   return (
     <EditorWrapSt>
-      {/* //* 태그추가 */}
+      {/* //* 썸네일 추가 */}
       <SettingInputWrapSt>
+        <h3 className="smallTitle">
+          썸네일<span className="caption"> (최대 3MB)</span>
+        </h3>
+        {thumbnailUrl && thumbnailAlt ? (
+          <ThumbnailPreviewWrapSt>
+            <Image
+              src={thumbnailUrl}
+              alt={thumbnailAlt}
+              width={100}
+              height={100}
+            />
+          </ThumbnailPreviewWrapSt>
+        ) : (
+          <ThumbnailPreviewWrapSt
+            onClick={() => {
+              openModal({
+                type: 'addImage',
+                props: {
+                  callBackType: 'postThumbnail',
+                  setThumbnailUrl,
+                  setThumbnailAlt,
+                  setThumbnailIdx,
+                },
+              });
+            }}
+          >
+            +
+          </ThumbnailPreviewWrapSt>
+        )}
+      </SettingInputWrapSt>
+
+      {/* //* 태그추가 */}
+      <SettingInputWrapSt style={{ flex: 1 }}>
         <h3 className="smallTitle">
           태그<span className="caption"> (미선택시 비공개)</span>
         </h3>
@@ -58,7 +100,6 @@ export default function Write({ ...pageProps }: WritePageProps) {
               }
             }}
             border="bottom"
-            style={{ color: 'var(--gray-l)', flex: 1 }}
             placeholder="입력 후 엔터로 추가해주세요."
           />
           <AddedTagListSt>
@@ -96,9 +137,6 @@ export default function Write({ ...pageProps }: WritePageProps) {
           defaultValue={subject}
           onChange={subjectHandler}
           border="bottom"
-          style={{
-            color: 'var(--gray-l)',
-          }}
           placeholder="입력"
         />
       </SettingInputWrapSt>
@@ -112,9 +150,6 @@ export default function Write({ ...pageProps }: WritePageProps) {
           defaultValue={subtitle}
           onChange={subtitleHandler}
           border="bottom"
-          style={{
-            color: 'var(--gray-l)',
-          }}
           placeholder="입력"
         />
       </SettingInputWrapSt>
@@ -137,13 +172,25 @@ export default function Write({ ...pageProps }: WritePageProps) {
               return editPost(
                 postData.idx,
                 'N',
-                { subject, subtitle, content, tagNameData: addedTagList },
+                {
+                  subject,
+                  subtitle,
+                  content,
+                  tagNameData: addedTagList,
+                  thumbnailIdx,
+                },
                 router,
               );
             } else {
               return uploadPost(
                 'N',
-                { subject, subtitle, content, tagNameData: addedTagList },
+                {
+                  subject,
+                  subtitle,
+                  content,
+                  tagNameData: addedTagList,
+                  thumbnailIdx,
+                },
                 router,
               );
             }
@@ -158,13 +205,25 @@ export default function Write({ ...pageProps }: WritePageProps) {
               return editPost(
                 postData.idx,
                 'Y',
-                { subject, subtitle, content, tagNameData: addedTagList },
+                {
+                  subject,
+                  subtitle,
+                  content,
+                  tagNameData: addedTagList,
+                  thumbnailIdx,
+                },
                 router,
               );
             } else {
               return uploadPost(
                 'Y',
-                { subject, subtitle, content, tagNameData: addedTagList },
+                {
+                  subject,
+                  subtitle,
+                  content,
+                  tagNameData: addedTagList,
+                  thumbnailIdx,
+                },
                 router,
               );
             }
@@ -181,6 +240,28 @@ const EditorWrapSt = styled.article`
   gap: 25px;
 
   width: 100%;
+`;
+const ThumbnailPreviewWrapSt = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 8px;
+  width: 200px;
+  aspect-ratio: 1;
+  font-size: 30px;
+  border: 1px solid var(--gray-l);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+
+  & img {
+    height: 100%;
+  }
+
+  @media screen and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
+    width: 100px;
+    max-width: 80%;
+  }
 `;
 const TagSettingWrapSt = styled.div`
   display: flex;

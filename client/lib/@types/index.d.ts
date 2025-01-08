@@ -40,7 +40,8 @@ interface PostData {
   subject: string;
   content: string;
   subtitle?: string;
-  thumbnail?: string;
+  thumbnailIdx?: number;
+  thumbnailUrl?: string;
   thumbnailAlt?: string;
   datetime?: string;
   writerIdx?: number;
@@ -69,4 +70,13 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onFocus?: FocusEventHandler<HTMLInputElement>;
   border?: 'all' | 'left' | 'right' | 'top' | 'bottom';
   style?: CSSProperties;
+}
+
+//- Add image modal props
+interface AddImageModalProps {
+  callBackType?: string;
+  setEDitorState?: Dispatch<SetStateAction<string>>;
+  setThumbnailUrl?: Dispatch<SetStateAction<string>>;
+  setThumbnailAlt?: Dispatch<SetStateAction<string>>;
+  setThumbnailIdx?: Dispatch<SetStateAction<number>>;
 }

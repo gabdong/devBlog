@@ -1,9 +1,10 @@
-// import Image from 'next/image';
+import Image from 'next/image';
 import styled from 'styled-components';
 import { BsCalendar2DateFill, BsImage } from 'react-icons/bs';
 import Link from 'next/link';
 
 export default function PostList({ postList }: { postList: PostData[] }) {
+  console.log(postList);
   return (
     <PostListWrapSt>
       <h2 hidden>게시글 리스트</h2>
@@ -15,14 +16,20 @@ export default function PostList({ postList }: { postList: PostData[] }) {
             <PostItemSt key={data.idx}>
               <Link href={`/post/${data.idx}`}>
                 <div className="postThumbnailWrap">
-                  {/* //TODO 썸네일적용 */}
-                  {/* {data.thumbnail ? (
-                <Image src={data.thumbnail} alt="게시글 썸네일" />
-              ) : ( */}
-                  <div className="postInitialThumbnail">
-                    <BsImage />
-                  </div>
-                  {/* )} */}
+                  {data.thumbnailUrl && data.thumbnailAlt ? (
+                    <Image
+                      src={data.thumbnailUrl}
+                      alt={data.thumbnailAlt}
+                      // width={100}
+                      fill={true}
+                      // height={100}
+                      quality={75}
+                    />
+                  ) : (
+                    <div className="postInitialThumbnail">
+                      <BsImage />
+                    </div>
+                  )}
                 </div>
                 <div className="postInfoWrap">
                   <h3 className="postSubject subTitle">{data.subject}</h3>
@@ -72,6 +79,23 @@ const PostItemSt = styled.article`
     flex-direction: column;
 
     height: 100%;
+  }
+
+  .postThumbnailWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    aspect-ratio: 1.6 / 1;
+    position: relative;
+
+    img {
+      width: auto !important;
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%, -50%);
+    }
   }
 
   .postInitialThumbnail {

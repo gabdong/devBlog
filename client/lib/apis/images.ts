@@ -3,9 +3,14 @@ import axios, { isAxiosCustomError } from '@utils/axios';
 /**
  * - 이미지 업로드
  */
-export async function uploadImageFn(file: File, alt: string) {
+export async function uploadImageFn(
+  file: File,
+  alt: string,
+): Promise<{ imageUrl: string; imageAlt: string; imageIdx: number } | void> {
   const { name, size } = file;
 
+  if (size > 3 * 1024 * 1024)
+    return alert('이미지는 3MB 이하만 업로드 가능합니다.');
   // eslint-disable-next-line no-useless-escape
   if (!/^[A-Za-z0-9-_\.]+$/.test(name))
     return alert('파일명은 영어만 업로드 가능합니다.');

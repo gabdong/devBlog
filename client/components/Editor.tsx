@@ -19,7 +19,10 @@ export default function Editor({ ...props }: EditorProps) {
     keyCommand: 'Image',
     buttonProps: { 'aria-label': 'Add image', title: 'Add image' },
     execute: () => {
-      openModal({ type: 'addImage', props: { callBackType: 'editor' } });
+      openModal({
+        type: 'addImage',
+        props: { callBackType: 'editor', setEDitorState: props.onChange },
+      });
     },
   };
 

@@ -71,11 +71,12 @@ export default function Post({ ...pageProps }: PostPageProps): JSX.Element {
       </div>
 
       {/* //* 썸네일 */}
-      {postData.thumbnail && (
+      {postData.thumbnailUrl && postData.thumbnailAlt && (
         <ThumbnailWrapSt>
           <Image
-            src={postData.thumbnail}
-            alt={postData.thumbnailAlt || '게시글 썸네일'}
+            src={postData.thumbnailUrl}
+            alt={postData.thumbnailAlt}
+            fill={true}
           />
         </ThumbnailWrapSt>
       )}
@@ -124,11 +125,16 @@ const PostButtonWrapSt = styled.div`
   }
 `;
 const ThumbnailWrapSt = styled.div`
-  width: 100%;
+  width: auto;
+  height: 400px;
   text-align: center;
+  position: relative;
 
-  & img {
-    max-width: 50%;
+  img {
+    width: auto !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%);
   }
 
   @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {

@@ -7,6 +7,10 @@ const store = () => {
   return configureStore({
     reducer: rootReducer as Reducer<CombinedSliceState, UnknownAction>,
     devTools: process.env.NODE_ENV !== 'production',
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
   });
 };
 const wrapper = createWrapper(store);

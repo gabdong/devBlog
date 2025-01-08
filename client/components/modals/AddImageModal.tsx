@@ -3,16 +3,22 @@ import { useState } from 'react';
 
 import { uploadImageFn } from '@apis/images';
 import useInput from '@hooks/useInput';
+import useModal from '@hooks/useModal';
 
 import Button from '@components/Button';
 import Input from '@components/Input';
 
 export default function AddImageModal({
   ...props
-}: {
-  callBackType?: string;
-}): JSX.Element {
-  const { callBackType } = props;
+}: AddImageModalProps): JSX.Element {
+  const {
+    callBackType,
+    setEditorState,
+    setThumbnailUrl,
+    setThumbnailIdx,
+    setThumbnailAlt,
+  } = props;
+  const { closeModal } = useModal();
   const [previewImage, setPreviewImage] = useState<string>();
   const [uploadImage, setUploadImage] = useState<File>();
   const [alt, altHandler] = useInput('');
@@ -107,21 +113,33 @@ export default function AddImageModal({
           theme="border"
           style={{ alignSelf: 'center' }}
           id="addImageBtn"
-          // event={async (e) => {
-          event={async () => {
-            // const btn = e.currentTarget;
-            // btn.disabled = true; //TODO 살리기
+          event={async (e) => {
+            const btn = e.currentTarget;
+            btn.disabled = true;
 
             if (!uploadImage) return alert('이미지를 추가해주세요.');
             if (!alt) return alert('이미지 설명을 입력해주세요.');
 
-            await uploadImageFn(uploadImage, alt);
+            const uploadImageRes = await uploadImageFn(uploadImage, alt);
 
-            if (callBackType === 'editor') {
-              // 에디터 이미지 추가인경우
-            } else if (callBackType === 'postThumbnail') {
-              // 게시글 썸네일 설정인경우
+            if (typeof uploadImageRes === 'object' && uploadImageRes.imageIdx) {
+              const { imageIdx, imageUrl, imageAlt } = uploadImageRes;
+
+              console.log(setEditorState);
+              if (callBackType === 'editor' && setEditorState) {
+                // 에디터 이미지 추가인경우
+                setEditorState(
+                  (prev: string) => (prev += `![${imageAlt}](${imageUrl})`),
+                );
+              } else if (callBackType === 'postThumbnail') {
+                // 게시글 썸네일 설정인경우
+                setThumbnailUrl(imageUrl);
+                setThumbnailIdx(imageIdx);
+                setThumbnailAlt(imageAlt);
+              }
             }
+
+            closeModal();
           }}
         />
       </AddImageFormSt>

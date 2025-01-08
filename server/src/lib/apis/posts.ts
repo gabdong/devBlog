@@ -18,7 +18,7 @@ router.post(
   '/',
   asyncErrorHandler(async (req, res) => {
     const {
-      postData: { subject, content, subtitle, tagNameData },
+      postData: { subject, content, subtitle, tagNameData, thumbnailIdx },
       isPublic,
       userData,
     }: {
@@ -26,6 +26,7 @@ router.post(
         subject: string;
         content: string;
         subtitle: string;
+        thumbnailIdx: number;
         tagNameData: string[];
       };
       isPublic: 'Y' | 'N';
@@ -108,7 +109,7 @@ router.post(
     const { idx: userIdx } = userData;
 
     const insertPostRes = await req.dbQuery(
-      'INSERT INTO posts SET subject=?, subtitle=?, content=?, public=?, member=?, auth=0, tags=?',
+      'INSERT INTO posts SET subject=?, subtitle=?, content=?, public=?, member=?, auth=0, tags=?, thumbnail=?',
       [
         subject,
         subtitle,
@@ -116,6 +117,7 @@ router.post(
         isPublic,
         userIdx,
         JSON.stringify(saveTagData),
+        thumbnailIdx,
       ],
       buildErrorMessage(
         '게시글 등록을 실패했습니다.',
@@ -136,7 +138,7 @@ router.put(
   '/:postIdx',
   asyncErrorHandler(async (req, res) => {
     const {
-      postData: { subject, content, subtitle, tagNameData },
+      postData: { subject, content, subtitle, tagNameData, thumbnailIdx },
       isPublic,
       userData,
     }: {
@@ -144,6 +146,7 @@ router.put(
         subject: string;
         content: string;
         subtitle: string;
+        thumbnailIdx: number;
         tagNameData: string[];
       };
       isPublic: 'Y' | 'N';
@@ -227,7 +230,7 @@ router.put(
     const { idx: userIdx } = userData;
 
     const updatePostRes = await req.dbQuery(
-      'UPDATE posts SET subject=?, subtitle=?, content=?, public=?, member=?, auth=0, tags=? WHERE idx=?',
+      'UPDATE posts SET subject=?, subtitle=?, content=?, public=?, member=?, auth=0, tags=?, thumbnail=? WHERE idx=?',
       [
         subject,
         subtitle,
@@ -235,6 +238,7 @@ router.put(
         isPublic,
         userIdx,
         JSON.stringify(saveTagData),
+        thumbnailIdx,
         postIdx,
       ],
       buildErrorMessage(
@@ -319,7 +323,7 @@ router.get(
 
     const getPostListRes = await req.dbQuery(
       `
-      SELECT posts.idx, posts.subject, posts.subtitle, posts.content, posts.datetime, posts.tags, images.url AS thumbnail, images.alt AS thumbnailAlt
+      SELECT posts.idx, posts.subject, posts.subtitle, posts.content, posts.datetime, posts.tags, images.url AS thumbnailUrl, images.alt AS thumbnailAlt
       FROM posts posts
       LEFT JOIN images images
         ON images.idx=posts.thumbnail 
@@ -357,7 +361,7 @@ router.get(
         posts.member AS writerIdx, 
         posts.datetime AS datetime, 
         members.name AS memberName, 
-        images.url AS thumbnail, 
+        images.url AS thumbnailUrl, 
         images.alt AS thumbnailAlt
       FROM posts posts 
       INNER JOIN members members 
