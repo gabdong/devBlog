@@ -142,7 +142,7 @@ const ThumbnailWrapSt = styled.div`
   }
 `;
 const PostContentSt = styled(EditorMarkdown)`
-  background: none;
+  background: none !important;
 
   & .anchor {
     display: none;
