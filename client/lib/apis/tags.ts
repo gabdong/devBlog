@@ -1,5 +1,9 @@
 import axios, { isAxiosCustomError } from '@utils/axios';
 
+/**
+ * - 태그 리스트 요청
+ * SSR에서만 사용
+ */
 export const getTagList = async ({
   userData,
 }: {

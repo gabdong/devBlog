@@ -16,7 +16,10 @@ instance.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     if (!config.data) return config;
 
-    const checkTokenVal = config.data.checkToken || false; // 로그인 판별이 필요한 요청
+    const isFormData = config.data instanceof FormData;
+    const checkTokenVal = isFormData
+      ? config.data.get('checkToken') === 'true'
+      : config.data.checkToken || false; // 로그인 판별이 필요한 요청
     const isCheckToken = config.data.isCheckToken || false; // 토큰정보조회 함수에서 호출 여부
 
     //* front 요청에서 로그인검증 필요할경우
@@ -26,12 +29,19 @@ instance.interceptors.request.use(
         if (checkTokenRes) {
           const { userData } = checkTokenRes;
 
-          if (userData) config.data.userData = userData;
+          if (userData) {
+            if (isFormData) {
+              config.data.append('userData', JSON.stringify(userData));
+            } else {
+              config.data.userData = userData;
+            }
+          }
         }
       } catch (err) {
         if (isAxiosCustomError(err)) return Promise.reject(err);
       }
     }
+
     return config;
   },
 );

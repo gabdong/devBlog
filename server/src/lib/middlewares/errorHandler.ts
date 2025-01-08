@@ -19,6 +19,7 @@ export const errorHandler = (
     message = err.message;
   }
 
+  console.log(err);
   res.status(statusCode).json({ message });
 };
 

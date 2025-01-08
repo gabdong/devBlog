@@ -272,6 +272,17 @@ router.get(
     //* SQL 조건
     let getPostListSqlCond = '';
     if (tagIdx === 'private') {
+      if (userData.auth < 2) {
+        throw new CustomError(
+          buildErrorMessage(
+            '접근 권한이 없습니다.',
+            CURRENT_FILE,
+            getCurrentLine(),
+          ),
+          401,
+        );
+      }
+
       getPostListSqlCond = " AND posts.public='N'";
     } else {
       getPostListSqlCond = " AND posts.public='Y'";

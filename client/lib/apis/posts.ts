@@ -3,6 +3,7 @@ import { NextRouter } from 'next/router';
 
 /**
  * - 게시글 리스트 요청
+ * SSR에서만 사용
  */
 export async function getPostList(
   tagIdx: number | 'latest' | 'private' | 'total',
@@ -35,6 +36,7 @@ export async function getPostList(
 }
 /**
  * - 게시글 요청
+ * SSR에서만 사용
  */
 export async function getPost(
   postIdx: number,

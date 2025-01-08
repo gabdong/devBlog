@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-// import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import axios, { isAxiosCustomError } from '@utils/axios';
@@ -23,7 +22,7 @@ export default function LoginModal(): JSX.Element {
    */
   const loginFn = async (): Promise<void> => {
     const btn: HTMLButtonElement = document.getElementById(
-      'login_btn',
+      'logInBtn',
     ) as HTMLButtonElement;
     btn.disabled = true;
 
@@ -82,6 +81,7 @@ export default function LoginModal(): JSX.Element {
             border="bottom"
           />
           <AccountBtnWrapSt>
+            {/* //TODO 아이디, 비밀번호찾기 */}
             {/* <Link href="/">
               <span className="caption">Forgot your ID or PW?</span>
             </Link> */}
@@ -94,7 +94,7 @@ export default function LoginModal(): JSX.Element {
           text="LOGIN"
           theme="border"
           style={{ alignSelf: 'center' }}
-          id="login_btn"
+          id="logInBtn"
         />
       </LoginFormSt>
     </LoginModalSt>

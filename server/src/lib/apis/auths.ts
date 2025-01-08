@@ -128,18 +128,19 @@ router.post(
         500,
       );
     }
+
     res.cookie('accessToken', accessToken, {
       maxAge: 1000 * 60 * 15, // 15분
       httpOnly: true,
       sameSite: 'strict',
-      secure: false, //TODO product 배포시 true로 변경
+      secure: process.env.IS_PRODUCT === 'Y',
       path: '/',
     });
     res.cookie('refreshTokenHashIdx', tokenHashIdx, {
       maxAge: 1000 * 60 * 60 * 24, // 1일
       httpOnly: true,
       sameSite: 'strict',
-      secure: false, //TODO product 배포시 true로 변경
+      secure: process.env.IS_PRODUCT === 'Y',
       path: '/',
     });
 
@@ -315,14 +316,14 @@ router.get(
       maxAge: 1000 * 60 * 15, // 15분
       httpOnly: true,
       sameSite: 'strict',
-      secure: false, //TODO product 배포시 true로 변경
+      secure: process.env.IS_PRODUCT === 'Y',
       path: '/',
     });
     res.cookie('refreshTokenHashIdx', newRefreshTokenHashIdx, {
       maxAge: 1000 * 60 * 60 * 24, // 1일
       httpOnly: true,
       sameSite: 'strict',
-      secure: false, //TODO product 배포시 true로 변경
+      secure: process.env.IS_PRODUCT === 'Y',
       path: '/',
     });
 

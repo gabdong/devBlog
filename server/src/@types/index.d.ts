@@ -12,6 +12,7 @@ declare global {
       ) => Promise<[QueryResult, FieldPacket[]]>;
     }
   }
+
   //- Jwt token 검증 return type
   type CheckTokenType = false | { userIdx: number; iat: number; exp: number };
 

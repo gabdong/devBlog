@@ -9,12 +9,14 @@ import { useAppSelector } from '@redux/hooks';
 import xBtn from '@public/images/x_btn.png';
 import LoginModal from '@components/modals/LoginModal';
 import SignUpModal from '@components/modals/SignUpModal';
+import AddImageModal from '@components/modals/AddImageModal';
 
 const MODAL_MAP: {
-  [key: string]: () => JSX.Element;
+  [key: string]: ({ ...props }) => JSX.Element;
 } = {
   login: LoginModal,
   signUp: SignUpModal,
+  addImage: AddImageModal,
 };
 
 export default function ModalContainer(): ReactPortal | null {

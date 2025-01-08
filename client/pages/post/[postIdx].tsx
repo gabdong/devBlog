@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
 
 import { deletePost, getPost } from '@apis/posts';
 import { isAxiosCustomError } from '@utils/axios';
@@ -10,6 +8,15 @@ import ssrRequireAuthentication from '@utils/ssrRequireAuthentication';
 
 import LinkButton from '@components/LinkButton';
 import Button from '@components/Button';
+import dynamic from 'next/dynamic';
+
+const EditorMarkdown = dynamic(
+  () =>
+    import('@uiw/react-md-editor').then((mod) => {
+      return mod.default.Markdown;
+    }),
+  { ssr: false },
+);
 
 interface PostPageProps extends PageProps {
   gsspProps: { postData: PostData };
@@ -20,7 +27,7 @@ export default function Post({ ...pageProps }: PostPageProps): JSX.Element {
     gsspProps: { postData },
     userData,
   } = pageProps;
-  const isWriter = userData.idx === postData.writerIdx;
+  const isWriter = userData.auth === 10 || userData.idx === postData.writerIdx;
   const router = useRouter();
 
   return (
@@ -74,11 +81,7 @@ export default function Post({ ...pageProps }: PostPageProps): JSX.Element {
       )}
 
       {/* //* 내용 */}
-      <PostContentSt>
-        <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-          {postData.content}
-        </ReactMarkdown>
-      </PostContentSt>
+      <PostContentSt source={postData.content} />
     </PostWrapSt>
   );
 }
@@ -134,48 +137,11 @@ const ThumbnailWrapSt = styled.div`
     }
   }
 `;
-const PostContentSt = styled.div`
-  word-break: break-all;
+const PostContentSt = styled(EditorMarkdown)`
+  background: none;
 
-  & h1 {
-    margin: 0.67rem 0;
-    padding-bottom: 0.3rem;
-    border-bottom: 1px solid var(--gray-l);
-    font-size: 2rem;
-    font-weight: 600;
-  }
-
-  & h2 {
-    margin: 0.67rem 0;
-    padding-bottom: 0.3rem;
-    border-bottom: 1px solid var(--gray-l);
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-
-  & h3 {
-    margin: 0.67rem 0;
-    padding-bottom: 0.3rem;
-    font-size: 1.17rem;
-  }
-
-  & h4 {
-    margin: 0.67rem 0;
-    padding-bottom: 0.3rem;
-    font-size: 1rem;
-  }
-
-  & h5 {
-    margin: 0.67rem 0;
-    padding-bottom: 0.3rem;
-    font-size: 0.875rem;
-  }
-
-  & h6 {
-    margin: 0.67rem 0;
-    padding-bottom: 0.3rem;
-    font-size: 0.85rem;
-    color: var(--gray-l);
+  & .anchor {
+    display: none;
   }
 `;
 

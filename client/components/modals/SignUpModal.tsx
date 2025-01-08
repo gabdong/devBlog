@@ -23,6 +23,11 @@ export default function SignUpModal(): JSX.Element {
    * - 회원가입
    */
   const signUpFn = async (): Promise<void> => {
+    const btn: HTMLButtonElement = document.getElementById(
+      'sighUpBtn',
+    ) as HTMLButtonElement;
+    btn.disabled = true;
+
     // id
     if (!/^[a-zA-Z0-9]*$/.test(id))
       return alert('아이디는 영어와 숫자만 입력해주세요.');
@@ -96,7 +101,7 @@ export default function SignUpModal(): JSX.Element {
             <span className="caption">아이디</span>
             <Input
               type="text"
-              placeholder="영어 / 숫자만 입력, 15자 이내"
+              placeholder="영어 / 숫자만 입력 ( 15자 이내 )"
               defaultValue={id}
               onChange={idHandler}
               border="bottom"
@@ -107,7 +112,7 @@ export default function SignUpModal(): JSX.Element {
             <span className="caption">비밀번호</span>
             <Input
               type="password"
-              placeholder="영어 / 숫자 / 특수문자만 입력, 15자 이내"
+              placeholder="영어 / 숫자 / 특수문자만 입력 ( 15자 이내 )"
               defaultValue={pw}
               onChange={pwHandler}
               maxLength={15}
@@ -160,7 +165,7 @@ export default function SignUpModal(): JSX.Element {
           text="SignUp"
           theme="border"
           style={{ alignSelf: 'center' }}
-          id="signup_btn"
+          id="signUpBtn"
         />
       </SignUpFormSt>
     </SignUpModalSt>

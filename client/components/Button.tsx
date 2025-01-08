@@ -6,7 +6,7 @@ import { makeClassName } from '@utils/utils';
 interface ButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
-  text: string;
+  text?: string;
   event?: (
     e: MouseEvent<HTMLButtonElement>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -42,8 +42,9 @@ export default function Button({
       style={style}
       id={id}
     >
-      <span>{text}</span>
+      {text && <span>{text}</span>}
       {icon && <div>{icon}</div>}
+      {rest.children && rest.children}
     </ButtonSt>
   );
 }

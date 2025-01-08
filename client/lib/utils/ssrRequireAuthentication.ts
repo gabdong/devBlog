@@ -66,7 +66,7 @@ const ssrRequireAuthentication =
             httpOnly: true,
             sameSite: 'strict',
             path: '/',
-            secure: false, //TODO 배포시 true로 변경
+            secure: process.env.NODE_ENV === 'production',
           },
         );
         const accessTokenCookie = serialize('accessToken', accessToken, {
@@ -74,7 +74,7 @@ const ssrRequireAuthentication =
           httpOnly: true,
           sameSite: 'strict',
           path: '/',
-          secure: false, //TODO 배포시 true로 변경
+          secure: process.env.NODE_ENV === 'production',
         });
         ctx.res.setHeader('Set-Cookie', [
           refreshTokenHashIdxCookie,
@@ -89,14 +89,14 @@ const ssrRequireAuthentication =
           httpOnly: true,
           sameSite: 'strict',
           path: '/',
-          secure: false, //TODO 배포시 true로 변경
+          secure: process.env.NODE_ENV === 'production',
         });
         const accessTokenCookie = serialize('accessToken', '', {
           maxAge: 0,
           httpOnly: true,
           sameSite: 'strict',
           path: '/',
-          secure: false, //TODO 배포시 true로 변경
+          secure: process.env.NODE_ENV === 'production',
         });
         ctx.res.setHeader('Set-Cookie', [
           refreshTokenHashIdxCookie,
@@ -104,7 +104,7 @@ const ssrRequireAuthentication =
         ]);
       }
     } catch (err) {
-      console.error(err, 'from GSSP() 93');
+      console.error(err);
     }
 
     //* Tag Data
@@ -118,7 +118,7 @@ const ssrRequireAuthentication =
       if (privatePostCnt > 0 && returnData.userData.isLogin)
         returnData.privatePostCnt = privatePostCnt;
     } catch (err) {
-      console.error(err, 'from GSSP() 104');
+      console.error(err);
     }
 
     //* Private Page redirect
