@@ -63,9 +63,7 @@ export default function Post({ ...pageProps }: PostPageProps): JSX.Element {
                 if (!postData.idx) return alert('게시글 정보가 없습니다.');
                 return deletePost(postData.idx, router);
               }}
-            >
-              삭제
-            </Button>
+            />
           </PostButtonWrapSt>
         )}
       </div>
