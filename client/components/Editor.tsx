@@ -21,7 +21,7 @@ export default function Editor({ ...props }: EditorProps) {
     execute: () => {
       openModal({
         type: 'addImage',
-        props: { callBackType: 'editor', setEDitorState: props.onChange },
+        props: { callBackType: 'editor', setEditorState: props.onChange },
       });
     },
   };

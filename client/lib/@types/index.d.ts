@@ -75,7 +75,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 //- Add image modal props
 interface AddImageModalProps {
   callBackType?: string;
-  setEDitorState?: Dispatch<SetStateAction<string>>;
+  setEditorState?: Dispatch<SetStateAction<string>>;
   setThumbnailUrl?: Dispatch<SetStateAction<string>>;
   setThumbnailAlt?: Dispatch<SetStateAction<string>>;
   setThumbnailIdx?: Dispatch<SetStateAction<number>>;
