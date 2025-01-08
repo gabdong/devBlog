@@ -4,7 +4,6 @@ import { BsCalendar2DateFill, BsImage } from 'react-icons/bs';
 import Link from 'next/link';
 
 export default function PostList({ postList }: { postList: PostData[] }) {
-  console.log(postList);
   return (
     <PostListWrapSt>
       <h2 hidden>게시글 리스트</h2>
