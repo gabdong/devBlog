@@ -38,6 +38,10 @@ function App({ Component, ...rest }: AppProps): JSX.Element {
   return (
     <Provider store={store}>
       <Head>
+        <meta
+          name="viewport"
+          content="initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=no;"
+        />
         <title>Gabdong</title>
       </Head>
       <WrapperSt
