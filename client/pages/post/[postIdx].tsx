@@ -9,6 +9,7 @@ import ssrRequireAuthentication from '@utils/ssrRequireAuthentication';
 import LinkButton from '@components/LinkButton';
 import Button from '@components/Button';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 
 const EditorMarkdown = dynamic(
   () =>
@@ -31,57 +32,74 @@ export default function Post({ ...pageProps }: PostPageProps): JSX.Element {
   const router = useRouter();
 
   return (
-    <PostWrapSt>
-      {/* //* 제목 */}
-      <h2 className="headline">{postData.subject}</h2>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        {/* //* 작성자, 작성일 */}
-        <PostInfoWrapSt>
-          <h3 className="subTitle">{postData.memberName}</h3>
-          <p className="normalText">
-            {postData.datetime &&
-              new Date(postData.datetime).toLocaleDateString('ko-KR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-              })}
-          </p>
-        </PostInfoWrapSt>
-
-        {/* //* 수정, 삭제 버튼 */}
-        {!isWriter ? null : (
-          <PostButtonWrapSt>
-            <LinkButton
-              text="수정"
-              href={`/editor/edit?postIdx=${postData.idx}`}
-              theme="none"
-            />
-            <Button
-              text="삭제"
-              theme="none"
-              event={() => {
-                if (!postData.idx) return alert('게시글 정보가 없습니다.');
-                return deletePost(postData.idx, router);
-              }}
-            />
-          </PostButtonWrapSt>
+    <>
+      <Head>
+        <title>{postData.subject}</title>
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={postData.subject} />
+        <meta property="og:locale" content="ko_KR" />
+        {postData.subtitle && (
+          <>
+            <meta name="description" content={postData.subtitle} />
+            <meta name="og:description" content={postData.subtitle} />
+          </>
         )}
-      </div>
+        {postData.thumbnailUrl && (
+          <meta name="og:description" content={postData.thumbnailUrl} />
+        )}
+      </Head>
+      <PostWrapSt>
+        {/* //* 제목 */}
+        <h2 className="headline">{postData.subject}</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          {/* //* 작성자, 작성일 */}
+          <PostInfoWrapSt>
+            <h3 className="subTitle">{postData.memberName}</h3>
+            <p className="normalText">
+              {postData.datetime &&
+                new Date(postData.datetime).toLocaleDateString('ko-KR', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                })}
+            </p>
+          </PostInfoWrapSt>
 
-      {/* //* 썸네일 */}
-      {postData.thumbnailUrl && postData.thumbnailAlt && (
-        <ThumbnailWrapSt>
-          <Image
-            src={postData.thumbnailUrl}
-            alt={postData.thumbnailAlt}
-            fill={true}
-          />
-        </ThumbnailWrapSt>
-      )}
+          {/* //* 수정, 삭제 버튼 */}
+          {!isWriter ? null : (
+            <PostButtonWrapSt>
+              <LinkButton
+                text="수정"
+                href={`/editor/edit?postIdx=${postData.idx}`}
+                theme="none"
+              />
+              <Button
+                text="삭제"
+                theme="none"
+                event={() => {
+                  if (!postData.idx) return alert('게시글 정보가 없습니다.');
+                  return deletePost(postData.idx, router);
+                }}
+              />
+            </PostButtonWrapSt>
+          )}
+        </div>
 
-      {/* //* 내용 */}
-      <PostContentSt source={postData.content} />
-    </PostWrapSt>
+        {/* //* 썸네일 */}
+        {postData.thumbnailUrl && postData.thumbnailAlt && (
+          <ThumbnailWrapSt>
+            <Image
+              src={postData.thumbnailUrl}
+              alt={postData.thumbnailAlt}
+              fill={true}
+            />
+          </ThumbnailWrapSt>
+        )}
+
+        {/* //* 내용 */}
+        <PostContentSt source={postData.content} />
+      </PostWrapSt>
+    </>
   );
 }
 
