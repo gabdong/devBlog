@@ -38,6 +38,10 @@ export default class MyDocument extends Document {
             name="viewport"
             content="initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=no;"
           />
+          <meta
+            name="google-site-verification"
+            content="OPfSIjuzB6P7RnrF88PqkLUV_ZNtzS-9EdiYdit7uGQ"
+          />
         </Head>
         <body>
           <Main />
