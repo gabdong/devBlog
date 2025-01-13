@@ -24,7 +24,7 @@ export default function SignUpModal(): JSX.Element {
    */
   const signUpFn = async (): Promise<void> => {
     const btn: HTMLButtonElement = document.getElementById(
-      'sighUpBtn',
+      'signUpBtn',
     ) as HTMLButtonElement;
     btn.disabled = true;
 
