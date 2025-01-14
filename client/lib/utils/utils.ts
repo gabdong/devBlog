@@ -3,6 +3,6 @@
  * @param arr - className으로 만들 배열
  * @returns - className
  */
-export function makeClassName(arr: string[]): string {
+export function buildClassName(arr: string[]): string {
   return arr.filter((str) => str != '').join(' ');
 }

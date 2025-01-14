@@ -1,7 +1,7 @@
 import { MouseEvent } from 'react';
 import styled from 'styled-components';
 
-import { makeClassName } from '@utils/utils';
+import { buildClassName } from '@utils/utils';
 
 interface ButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,7 +36,7 @@ export default function Button({
   return (
     <ButtonSt
       className={
-        Array.isArray(className) ? makeClassName([...className, theme]) : theme
+        Array.isArray(className) ? buildClassName([...className, theme]) : theme
       }
       onClick={handleClick}
       style={style}

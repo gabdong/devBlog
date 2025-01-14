@@ -6,14 +6,15 @@ import { NextRouter } from 'next/router';
  * SSR에서만 사용
  */
 export async function getPostList(
-  tagIdx: number | 'latest' | 'private' | 'total',
+  tagIdx: number | 'latest' | 'private' | 'total' | 'search',
   page: number,
   limit: number,
   paginationUsing: boolean,
   userData: UserState,
+  search?: string,
 ): Promise<{ postList: PostData[]; totalCnt: number }> {
   try {
-    const payload = { limit, paginationUsing, userData };
+    const payload = { limit, paginationUsing, userData, search };
 
     const getPostListRes = await axios.get(
       `/apis/posts/list/${tagIdx}/?page=${page}`,

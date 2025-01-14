@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Link from 'next/link';
 
-import { makeClassName } from '@utils/utils';
+import { buildClassName } from '@utils/utils';
 
 interface ButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,7 +27,7 @@ export default function LinkButton({
   return (
     <ButtonSt
       className={
-        Array.isArray(className) ? makeClassName([...className, theme]) : theme
+        Array.isArray(className) ? buildClassName([...className, theme]) : theme
       }
       href={href}
       style={style}

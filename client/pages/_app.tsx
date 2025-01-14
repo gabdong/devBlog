@@ -13,7 +13,7 @@ import wrapper from '@redux/store';
 import Nav from '@components/Nav';
 import Header from '@components/header/Header';
 import ModalContainer from '@components/ModalContainer';
-import { makeClassName } from '@utils/utils';
+import { buildClassName } from '@utils/utils';
 
 const pretendard = localFont({
   src: '../public/fonts/PretendardVariable.woff2',
@@ -46,7 +46,7 @@ function App({ Component, ...rest }: AppProps): JSX.Element {
       </Head>
       <WrapperSt
         id="wrapper"
-        className={makeClassName([pretendard.variable, noHeaderClass])}
+        className={buildClassName([pretendard.variable, noHeaderClass])}
       >
         {!isNoHeader && <Header {...pageProps} />}
         <MainSt>

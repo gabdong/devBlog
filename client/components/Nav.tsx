@@ -6,6 +6,7 @@ import xBtn from '@public/images/x_btn.png';
 import searchIcon from '@public/images/search_icon.png';
 
 import LinkButton from '@components/LinkButton';
+import { useRouter } from 'next/router';
 
 interface NavProps extends PageProps {
   tagList: TagData[];
@@ -26,6 +27,7 @@ const navClose = () => {
 };
 
 export default function Nav({ userData, ...rest }: NavProps) {
+  const router = useRouter();
   const { isLogin } = userData;
   const { tagList, query, totalPostCnt, privatePostCnt } = rest;
   const activeTagIdx = query.tagIdx
@@ -46,7 +48,22 @@ export default function Nav({ userData, ...rest }: NavProps) {
           <Image src={xBtn} alt="close button" />
         </CloseBtnSt>
         <SearchPostWrapSt>
-          <input type="text" placeholder="검색어를 입력하세요." />
+          <input
+            type="text"
+            placeholder="검색어를 입력하세요."
+            onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === 'Enter') {
+                const input = e.target as HTMLInputElement;
+                const searchWord = input.value;
+
+                if (searchWord) {
+                  router.push(`/tag/search?search=${searchWord}&page=1`);
+                } else {
+                  router.push(`/tag/total?page=1`);
+                }
+              }
+            }}
+          />
           <Image
             className="pointer"
             src={searchIcon}

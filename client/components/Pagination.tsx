@@ -46,17 +46,18 @@ function Pagination({
   const prevArrowUsing = page > 1 && prevPageStartNum > 1 ? true : false;
   const nextArrowUsing =
     page < lastNum && nextGroup !== groupCnt ? true : false;
+  const pathJoin = path.includes('?') ? '&' : '?';
 
   return (
     <PaginationSt>
       {firstPageBtnUsing ? ( //* 첫번째 페이지
-        <Link href={`${path}?page=1`}>
+        <Link href={`${path}${pathJoin}page=1`}>
           <FirstPage />
         </Link>
       ) : null}
 
       {prevArrowUsing ? ( //* 이전페이지그룹
-        <Link href={`${path}?page=${prevPageStartNum}`}>
+        <Link href={`${path}${pathJoin}page=${prevPageStartNum}`}>
           <Prev />
         </Link>
       ) : null}
@@ -69,7 +70,7 @@ function Pagination({
           <LinkButton
             key={pageNum}
             text={String(pageNum)}
-            href={`${path}?page=${pageNum}`}
+            href={`${path}${pathJoin}page=${pageNum}`}
             className={[page === pageNum ? 'active' : '']}
             theme="none"
           />
@@ -78,7 +79,7 @@ function Pagination({
 
       {nextArrowUsing ? ( //* 다음페이지그룹
         <Link
-          href={`${path}?page=${nextPageStartNum > lastNum ? lastNum : nextPageStartNum}`}
+          href={`${path}${pathJoin}page=${nextPageStartNum > lastNum ? lastNum : nextPageStartNum}`}
         >
           <Next />
         </Link>

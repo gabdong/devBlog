@@ -267,8 +267,7 @@ router.put(
 router.get(
   '/list/:tagIdx',
   asyncErrorHandler(async (req, res) => {
-    //TODO 검색어 추가
-    const { limit, paginationUsing, userData } = req.body;
+    const { limit, paginationUsing, userData, search } = req.body;
     const { tagIdx } = req.params;
     const { page } = req.query;
     const offset = (Number(page) - 1) * limit;
@@ -292,8 +291,11 @@ router.get(
       getPostListSqlCond = " AND posts.public='Y'";
 
       // 태그선택시
-      if (tagIdx !== 'latest' && tagIdx !== 'total')
+      if (tagIdx !== 'latest' && tagIdx !== 'total' && tagIdx !== 'search')
         getPostListSqlCond += ` AND JSON_CONTAINS(posts.tags, '${tagIdx}')`;
+
+      // 검색어 있을때
+      if (search) getPostListSqlCond += ` AND subject LIKE ?`;
     }
     getPostListSqlCond += ' ORDER BY posts.datetime DESC, posts.idx DESC ';
 
@@ -308,7 +310,7 @@ router.get(
         AND auth<=?
         ${getPostListSqlCond}
       `,
-        [userData.auth],
+        [userData.auth, `%${search}%`],
         buildErrorMessage(
           '게시글 총 갯수 조회를 실패했습니다',
           CURRENT_FILE,
@@ -331,7 +333,7 @@ router.get(
       AND posts.auth<=?
       ${getPostListSqlCond}
       `,
-      [userData.auth],
+      [userData.auth, `%${search}%`],
       buildErrorMessage(
         '게시글 리스트 조회를 실패했습니다',
         CURRENT_FILE,
