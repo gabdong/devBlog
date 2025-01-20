@@ -13,6 +13,7 @@ const createStore = () => {
       }),
   });
 };
+
 const store = createStore();
 const wrapper = createWrapper(createStore);
 
