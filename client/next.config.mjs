@@ -19,7 +19,13 @@ const nextConfig = {
     ];
   },
   images: {
-    domains: ['gabdong.s3.ap-northeast-2.amazonaws.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'gabdong.s3.ap-northeast-2.amazonaws.com',
+        pathname: '**',
+      },
+    ],
   },
 };
 

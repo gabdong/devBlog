@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(
   cors({
     credentials: true, // 다른 도메인간 쿠키공유 허용여부
-    origin: 'http://localhost:3000', //TODO 허용할 도메인으로 변경
+    origin: 'http://localhost:3000',
   }),
 );
 app.use('/lib/apis', apis);

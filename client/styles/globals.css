@@ -140,7 +140,6 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
   cursor: pointer;
 }
 .headline {
-  font-family: 'SUIT-Medium';
   font-size: 34px;
   letter-spacing: 0.25px;
 }
@@ -155,7 +154,6 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
   letter-spacing: 0.1px;
 }
 .normalText {
-  font-family: 'SUIT-Regular';
   font-size: 14px;
   letter-spacing: 0.2px;
 }

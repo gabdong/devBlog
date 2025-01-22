@@ -1,5 +1,3 @@
-import { createPortal } from 'react-dom';
-import { ReactPortal } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 
@@ -19,15 +17,15 @@ const MODAL_MAP: {
   addImage: AddImageModal,
 };
 
-export default function ModalContainer(): ReactPortal | null {
+export default function ModalContainer() {
   const { closeModal } = useModal();
   const { type, props } = useAppSelector((store) => store.modal);
 
-  if (!type || typeof window === 'undefined') return null;
-
   const Modal = MODAL_MAP[type];
 
-  return createPortal(
+  if (!type || typeof window === 'undefined' || !Modal) return null;
+
+  return (
     <>
       <ModalContainerSt>
         <XBtnSt onClick={closeModal}>
@@ -36,8 +34,7 @@ export default function ModalContainer(): ReactPortal | null {
         <Modal {...props} />
       </ModalContainerSt>
       <ModalBackgroundSt onClick={closeModal} />
-    </>,
-    document.getElementById('modal') as HTMLElement,
+    </>
   );
 }
 
