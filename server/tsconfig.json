@@ -14,5 +14,5 @@
     "allowJs": true,
     "typeRoots": ["./node_modules/@types", "./src/@types"]
   },
-  "extends": ["./tsconfig.paths.json"]
+  "extends": "./tsconfig.paths.json"
 }
