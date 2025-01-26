@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 
 import { asyncErrorHandler } from '@middlewares/errorHandler';
 import { CustomError } from '@utils/customError';
@@ -11,7 +11,7 @@ import {
 } from '@utils/utils';
 
 const CURRENT_FILE = 'AUTH';
-const router = express.Router();
+const router = Router();
 
 router.post(
   '/signup',

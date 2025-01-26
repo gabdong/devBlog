@@ -2,14 +2,14 @@ import express from 'express';
 
 import tagsAPI from '@apis/tags';
 import authsAPI from '@apis/auths';
-import postAPI from '@apis/posts';
-import imageAPI from '@apis/images';
+import postsAPI from '@apis/posts';
+import imagesAPI from '@apis/images';
 
 const router = express.Router();
 
 router.use('/tags', tagsAPI);
 router.use('/auths', authsAPI);
-router.use('/posts', postAPI);
-router.use('/images', imageAPI);
+router.use('/posts', postsAPI);
+router.use('/images', imagesAPI);
 
 export default router;

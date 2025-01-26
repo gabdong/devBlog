@@ -8,7 +8,6 @@ export const errorHandler = (
   err: Error | CustomError,
   req: Request,
   res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction,
 ) => {
   let statusCode = 500;
@@ -17,10 +16,10 @@ export const errorHandler = (
   if (err instanceof CustomError) {
     statusCode = err.statusCode;
     message = err.message;
+    res.status(statusCode).json({ message });
+  } else {
+    next(err);
   }
-
-  console.log(err);
-  res.status(statusCode).json({ message });
 };
 
 /**
