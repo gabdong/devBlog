@@ -165,6 +165,10 @@ const PostContentSt = styled(EditorMarkdown)`
   & .anchor {
     display: none;
   }
+
+  & ul {
+    list-style: disc;
+  }
 `;
 
 export const getServerSideProps = ssrRequireAuthentication(
