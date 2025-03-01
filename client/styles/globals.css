@@ -77,9 +77,6 @@ html, body, #__next {
 body {
   line-height: 1;
 }
-body.modalAcitve {
-  overflow-y: hidden;
-}
 ol, ul {
   list-style: none;
 }
