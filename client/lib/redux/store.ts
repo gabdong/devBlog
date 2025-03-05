@@ -9,7 +9,7 @@ const createStore = () => {
     devTools: process.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
-        serializableCheck: false,
+        serializableCheck: false, // props로 callback fn을 전달해야 하는경우 대비
       }),
   });
 };
