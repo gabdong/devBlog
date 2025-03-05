@@ -1,7 +1,17 @@
 import Image from 'next/image';
 import styled from 'styled-components';
-import { BsCalendar2DateFill, BsImage } from 'react-icons/bs';
+import { BsCalendar2DateFill } from 'react-icons/bs';
 import Link from 'next/link';
+
+const DEFAULT_THUMBNAIL = [
+  'https://gabdong.s3.ap-northeast-2.amazonaws.com/images/DSC_7254.jpg',
+  'https://gabdong.s3.ap-northeast-2.amazonaws.com/images/DSC_8037.jpg',
+  'https://gabdong.s3.ap-northeast-2.amazonaws.com/images/DSC_8039.jpg',
+  'https://gabdong.s3.ap-northeast-2.amazonaws.com/images/DSC_7876.jpg',
+  'https://gabdong.s3.ap-northeast-2.amazonaws.com/images/DSC_7477.jpg',
+  'https://gabdong.s3.ap-northeast-2.amazonaws.com/images/DSC_6062.jpg',
+];
+let defaultThumbnailIndex = 0;
 
 export default function PostList({ postList }: { postList: PostData[] }) {
   return (
@@ -11,6 +21,11 @@ export default function PostList({ postList }: { postList: PostData[] }) {
         <h2 className="subTitle">게시글이 존재하지 않습니다.</h2>
       ) : (
         postList.map((data) => {
+          defaultThumbnailIndex++;
+
+          if (defaultThumbnailIndex > DEFAULT_THUMBNAIL.length - 1)
+            defaultThumbnailIndex = 0;
+
           return (
             <PostItemSt key={data.idx}>
               <Link href={`/post/${data.idx}`}>
@@ -26,7 +41,13 @@ export default function PostList({ postList }: { postList: PostData[] }) {
                     />
                   ) : (
                     <div className="postInitialThumbnail">
-                      <BsImage />
+                      <Image
+                        src={DEFAULT_THUMBNAIL[defaultThumbnailIndex]}
+                        alt="기본 썸네일 이미지"
+                        fill={true}
+                        style={{ objectFit: 'cover' }}
+                        quality={75}
+                      />
                     </div>
                   )}
                 </div>
@@ -90,7 +111,6 @@ const PostItemSt = styled.article`
     position: relative;
 
     img {
-      width: auto !important;
       left: 50% !important;
       top: 50% !important;
       transform: translate(-50%, -50%);
