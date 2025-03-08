@@ -35,6 +35,28 @@ export async function getPostList(
     return { postList: [], totalCnt: 0 };
   }
 }
+
+/**
+ * - 모든 게시글 리스트 요청
+ * SSR에서만 사용
+ */
+export async function getAllPostList(): Promise<{ postList: PostData[] }> {
+  try {
+    const getPostListRes = await axios.get(`/apis/posts/sitemap/all`);
+    const { postList } = getPostListRes.data;
+
+    return { postList };
+  } catch (err) {
+    if (isAxiosCustomError(err)) {
+      console.error(err.data.message);
+    } else {
+      console.log(err);
+    }
+
+    return { postList: [] };
+  }
+}
+
 /**
  * - 게시글 요청
  * SSR에서만 사용

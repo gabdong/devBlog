@@ -347,6 +347,32 @@ router.get(
   }),
 );
 
+//- 모든 게시글정보
+router.get(
+  '/sitemap/all',
+  asyncErrorHandler(async (req, res) => {
+    const getPostListRes = await req.dbQuery(
+      `
+      SELECT *, update_datetime AS updateDatetime
+      FROM posts 
+      WHERE delete_datetime IS NULL 
+      AND public='Y'
+      `,
+      [],
+      buildErrorMessage(
+        '게시글 전체 리스트 조회를 실패했습니다',
+        CURRENT_FILE,
+        getCurrentLine(),
+      ),
+      500,
+    );
+
+    const postList = getDbResultArr(getPostListRes);
+
+    res.json({ postList });
+  }),
+);
+
 //- 게시글 정보
 router.get(
   '/:postIdx',

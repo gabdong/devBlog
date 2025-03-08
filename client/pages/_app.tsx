@@ -31,8 +31,9 @@ function App({ Component, ...rest }: AppProps): JSX.Element {
 
   const errorPages = ['/401', '/404', '/500', '/_error'];
   const pathname = rest.router.route;
-  const isNoHeader = errorPages.includes(pathname);
-  const isNoNav = errorPages.includes(pathname);
+  const isNoHeader =
+    errorPages.includes(pathname) || pathname === '/sitemap.xml';
+  const isNoNav = errorPages.includes(pathname) || pathname === '/sitemap.xml';
   const noHeaderClass = isNoHeader ? 'isNoHeader' : '';
 
   return (
