@@ -22,8 +22,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const { postList } = await getAllPostList();
 
   res.setHeader('Content-Type', 'text/xml');
-  console.log(generateSitemap(postList));
-  // res.write(generateSitemap(postList));
+  res.write(generateSitemap(postList));
   res.end();
 
   return { props: {} };
